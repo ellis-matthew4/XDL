@@ -1,0 +1,4 @@
+show tom happy at center
+tom "What's the deal with that?"
+tom happy "Yo dog!"
+hide tom
