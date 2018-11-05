@@ -4,6 +4,8 @@ A dialogue system that uses a simple scripting language based on RenPy, but buil
 Things that currently work:
 
   1. Transpiling from SukiGD to JSON
+
+  2. Compile-Time error messages
   
 Things that are being worked on:
 
@@ -12,8 +14,6 @@ Things that are being worked on:
   1a. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
   
   2. The display system
-  
-  3. Compile-time error messages for incorrect syntax
   
 HOW IT WORKS:
 

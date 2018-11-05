@@ -1,1 +1,1 @@
-[{'action': 'show', 'char': 'tom', 'emote': 'happy', 'pos': 'center'}, {'char': 'tom', 'String': '"What\'s the deal with that?"'}, {'char': 'tom', 'emote': 'happy', 'String': '"Yo dog!"'}, {'action': 'hide', 'char': 'tom'}]
+{'dialogue': [{'action': 'show', 'char': 'tom', 'emote': 'happy', 'pos': 'center'}, {'action': 'dialogue', 'char': 'tom', 'String': '"What\'s the deal with that?"'}, {'char': 'tom', 'emote': 'happy', 'String': '"Yo dog!"'}, {'action': 'hide', 'char': 'tom'}]}

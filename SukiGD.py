@@ -179,7 +179,8 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	if dialogue == []:
 		return out
 	else:
-		return dialogue
+		out["dialogue"] = dialogue
+		return out
 
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
