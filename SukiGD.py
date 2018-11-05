@@ -147,6 +147,8 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 			temp["path"] = statement[3]
 		elif statement[0] == TOKEN_EMOTION:
 			checkSyntax(STMT_EMOTION, statement)
+			if temp == { }:
+				raise Exception("Syntax Error: An Emotion was declared before its Character")
 			temp[statement[1]] = EM_INDEX
 			EM_INDEX += 1
 		else:
