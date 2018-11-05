@@ -9,6 +9,8 @@ Things that are being worked on:
 
   1. Parsing from JSON into Godot
   
+  1a. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
+  
   2. The display system
   
   3. Compile-time error messages for incorrect syntax
