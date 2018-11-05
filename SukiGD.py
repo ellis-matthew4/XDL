@@ -168,6 +168,7 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
+					temp["action"] = "dialogue"
 					temp["char"] = statement[0]
 					temp["String"] = statement[1]
 				else:
