@@ -1,4 +1,5 @@
 import os
+import json
 
 TOKEN_POSITIONS = "POSITIONS:"
 TOKEN_POS = "Position"
@@ -118,6 +119,7 @@ def isString(s): #Checks to see if the token is of type TOKEN_STRING
 def parse(filename): #Takes the list of tokens created by the scan function and turns them into a dictionary
 	statements = scan('input/' + filename)
 	out = { }
+	chars = { }
 	temp = { }
 	currentCharName = ""
 	EM_INDEX = 0
@@ -140,7 +142,7 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 		elif statement[0] == TOKEN_CHAR:
 			checkSyntax(STMT_CHAR, statement)
 			if temp != { }:
-				out[currentCharName] = temp
+				chars[currentCharName] = temp
 				temp = { }
 				EM_INDEX = 0
 			currentCharName = statement[1]
@@ -178,11 +180,12 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 					temp["emote"] = statement[1]
 					temp["String"] = statement[2]
 			dialogue.append(temp)
-	if dialogue == []:
-		return out
-	else:
+	if chars != { }:
+		chars[currentCharName] = temp
+		out["Characters"] = chars
+	if dialogue != []:
 		out["dialogue"] = dialogue
-		return out
+	return out
 
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
@@ -194,7 +197,7 @@ def scan(filename): #Turns the input file into a list of lines, and each line in
 		word = ""
 		for c in line:
 			if not string:
-				if c == " " or c == "\n":
+				if c == " " or c == "\n" or c == "\r":
 					l.append(word)
 					word = ""
 				elif c == '"':
@@ -218,7 +221,7 @@ for filename in os.listdir('input/'): #Parses all input files, and writes their 
 	k = parse(filename)
 	filename = filename.rstrip(".txt")
 	filename = "output/" + filename + ".json"
-	f = open(filename, "w")
-	f.write(str(k))
+	with open(filename, "w") as f:
+		json.dump(k,f)
 	f.close()
 print("Done!")

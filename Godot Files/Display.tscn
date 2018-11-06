@@ -1,0 +1,69 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://Display.gd" type="Script" id=1]
+[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=2]
+[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=3]
+[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=4]
+[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=5]
+[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=6]
+[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=7]
+[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=8]
+[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=9]
+[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=10]
+[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=11]
+[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=12]
+[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=13]
+[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=14]
+[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=15]
+[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=16]
+[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=17]
+[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=18]
+[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=19]
+[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=20]
+[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=21]
+[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=22]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="root" type="CanvasLayer" index="0"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 1 )
+
+[node name="Positions" type="Node2D" parent="." index="0"]
+
+[node name="Characters" type="Node2D" parent="." index="1"]
+
+[node name="Harry" type="AnimatedSprite" parent="Characters" index="0"]
+
+visible = false
+frames = SubResource( 1 )
+animation = "default"
+
+[node name="Kayla" type="AnimatedSprite" parent="Characters" index="1"]
+
+visible = false
+frames = SubResource( 2 )
+animation = "default"
+
+

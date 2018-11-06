@@ -1,13 +1,27 @@
 POSITIONS:
-Position left = (0.2,0.5)
-Position right = (0.7,0.5)
+Position left = (0.3,0.6)
+Position right = (0.7,0.6)
 CHARACTERS:
-Emotion angry
-Character paul = "Paul"
-Emotion happy
-Emotion sad
-Character tom = "Tom"
-Emotion neutral
-Emotion happy
 Character harry = "Harry"
-Character jonah = "Jonah"
+Emotion bloody1
+Emotion bloody2
+Emotion bloody3
+Emotion cry
+Emotion happy
+Emotion laugh
+Emotion mad
+Emotion neutral
+Emotion sad
+Emotion shock
+Emotion shy
+Emotion smug
+Character kayla = "Kayla"
+Emotion cry
+Emotion happy
+Emotion laugh
+Emotion mad
+Emotion neutral
+Emotion sad
+Emotion shock
+Emotion smug
+Emotion think
