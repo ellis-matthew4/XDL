@@ -176,6 +176,7 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 					temp["char"] = statement[0]
 					temp["String"] = statement[1]
 				else:
+					temp["action"] = "dialogue"
 					temp["char"] = statement[0]
 					temp["emote"] = statement[1]
 					temp["String"] = statement[2]
