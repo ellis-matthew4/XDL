@@ -2,17 +2,41 @@ extends CanvasLayer
 
 onready var projectRes = Vector2(ProjectSettings.get_setting("display/window/size/width"), ProjectSettings.get_setting("display/window/size/height"))
 onready var charNodes = get_node("Characters")
+onready var textBox = get_node("TextBox/TextControl/Dialogue")
+onready var nameBox = get_node("TextBox/TextControl/Name")
 
 var constants
 var positions = {}
 var characters = {}
-
+var dialogue = []
+var current = 0
+var active = false
+var click = false
 
 func _ready():
 	get_tree().root.connect("size_changed", self, "reloadRes")
 	loadConstants("constants.json")
 	read("script1.json")
+	set_process(true)
 	pass
+	
+func _process(delta):
+	if active:
+		get_node("TextBox").visible = true
+		if current < len(dialogue):
+			var statement = dialogue[current]
+			print(statement)
+			if statement["action"] == "show":
+				Show(statement)
+			elif statement["action"] == "hide":
+				Hide(statement)
+	#		elif statement["action"] == "dialogue":
+	#			dialogue(statement)
+		else:
+			hideAll()
+			active = false
+		if Input.is_action_just_pressed("ui_select"):
+			current += 1
 	
 func loadConstants(filename):
 	var file = File.new()
@@ -43,15 +67,8 @@ func read(filename):
 	if data.error != OK:
 		print("FAILED TO READ FILE " + filename)
 		return
-	data = data.result["dialogue"]
-	for statement in data:
-		print(statement)
-		if statement["action"] == "show":
-			Show(statement)
-		elif statement["action"] == "hide":
-			Hide(statement)
-#		elif statement["action"] == "dialogue":
-#			dialogue(statement)
+	dialogue = data.result["dialogue"]
+	active = true
 			
 func Show(s): # 
 	var c = charNodes.get_node(characters[s["char"]]["path"])
@@ -63,3 +80,8 @@ func Hide(s):
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = Vector2(0,0)
 	c.visible = false
+func hideAll():
+	get_node("TextBox").visible = false
+	for c in charNodes.get_children():
+		c.global_position = Vector2(0,0)
+		c.visible = false
