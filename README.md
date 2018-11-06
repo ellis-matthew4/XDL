@@ -7,11 +7,11 @@ Things that currently work:
 
   2. Compile-Time error messages
   
-Things that are being worked on:
-
-  1. Parsing from JSON into Godot
+  3. Parsing from JSON into Godot
   
-  1a. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
+Things that are being worked on:
+  
+  1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
   
   2. The display system
   
@@ -49,6 +49,4 @@ Step 4: Check the output folder for your JSON files!
   
 State of the Software:
 
-While the transpiler currently works as intended if your syntax is correct, it does not have any form of error handling. This means that if your SukiGD code has a legal amount of arguments, it will transpile even if the syntax is incorrect. Because of the way the scanner and parser work, it is unlikely to not crash upon incorrect syntax, but it is possible to transpile incorrectly without errors.
-
-A dialogue system in Godot has not been built yet, but please keep in mind that SukiGD is just a JSON parser. If you'd like, you are more than welcome to create a dialogue system that uses my JSON formatting.
+Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system mostly works, I just need to have it actually load the text into the display. Iteration through statements is working as intended, and the enumerated display also works properly. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
