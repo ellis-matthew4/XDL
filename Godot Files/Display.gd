@@ -9,7 +9,7 @@ var constants
 var positions = {}
 var characters = {}
 var dialogue = []
-var current = 0
+var current = -1
 var active = false
 var click = false
 
@@ -23,20 +23,20 @@ func _ready():
 func _process(delta):
 	if active:
 		get_node("TextBox").visible = true
-		if current < len(dialogue):
-			var statement = dialogue[current]
-			print(statement)
-			if statement["action"] == "show":
-				Show(statement)
-			elif statement["action"] == "hide":
-				Hide(statement)
-	#		elif statement["action"] == "dialogue":
-	#			dialogue(statement)
-		else:
-			hideAll()
-			active = false
 		if Input.is_action_just_pressed("ui_select"):
 			current += 1
+			if current < len(dialogue):
+				var statement = dialogue[current]
+				if statement["action"] == "show":
+					Show(statement)
+				elif statement["action"] == "hide":
+					Hide(statement)
+				elif statement["action"] == "dialogue":
+					dialogue(statement)
+			else:
+				hideAll()
+				current = -1
+				active = false
 	
 func loadConstants(filename):
 	var file = File.new()
@@ -85,3 +85,10 @@ func hideAll():
 	for c in charNodes.get_children():
 		c.global_position = Vector2(0,0)
 		c.visible = false
+		
+func dialogue(s):
+	if s.has("emote"):
+		var c = charNodes.get_node(characters[s["char"]]["path"])
+		c.frame = characters[s["char"]][s["emote"]]
+	textBox.text = s["String"]
+	nameBox.text = s["char"].capitalize()
