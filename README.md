@@ -9,11 +9,11 @@ Things that currently work:
   
   3. Parsing from JSON into Godot
   
-Things that are being worked on:
+  4. The display system
+  
+Things that might be worked on:
   
   1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
-  
-  2. The display system
   
 HOW IT WORKS:
 
@@ -46,6 +46,16 @@ hide [Character]
 Step 3: Place all of your .txt files in the "input" folder and run SukiGD.py. Obviously, this requires Python.
 
 Step 4: Check the output folder for your JSON files!
+
+Step 5: Add the Display.tscn file to your Godot library and edit the scene to make it look the way you want it to
+
+Step 6: Add your characters as children of the "Characters" node as AnimatedSprites or Sprites with TextureAtlases. Make sure that the frame order matches the enumeration of your emotions in your constants file. (Make sure they are in the same order)
+
+Step 7: Create an instance of Display.tscn. The methods to use it are as follows:
+```
+loadConstants(filename) # use this to load constants. You can call this more than once, but keep in mind that calling it again will clear the current constants
+read(filename) # triggers a dialogue sequence. By default, this does not pause the game.
+```
   
 State of the Software:
 
