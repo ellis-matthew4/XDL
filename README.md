@@ -13,6 +13,12 @@ Things that currently work:
   
   4. The display system
   
+Upcoming features:
+  
+  1. New "Scene" and "Backdrop" keywords, for scripts and constants respectively
+  
+  2. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
+  
 Things that might be worked on:
   
   1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
