@@ -1,5 +1,7 @@
 # SukiGD
-A dialogue system that uses a simple scripting language based on RenPy, but built for Godot
+A dialogue system that uses a simple scripting language based on RenPy, but compiles to a JSON format built for Godot
+
+NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
 
 Things that currently work:
 
@@ -15,7 +17,7 @@ Things that might be worked on:
   
   1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
   
-HOW IT WORKS:
+HOW IT WORKS (Video soon(TM)):
 
 Step 1: Create a constants.txt file similar to the example in the input folder. This should contain declarations for all of your positions and characters. This is kept in a separate file so that you can load it automatically when the dialogue system is initialized in Godot. The following are the rules for constant declaration:
 ```
