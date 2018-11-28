@@ -1,3 +1,4 @@
+scene school
 show harry neutral at left
 show kayla neutral at right
 harry "This is a test."
