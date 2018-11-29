@@ -9,6 +9,9 @@ TOKEN_EMOTION = "Emotion"
 TOKEN_SHOW = "show"
 TOKEN_HIDE = "hide"
 TOKEN_EQ = "="
+TOKEN_BACKDROPS = "BACKDROPS:"
+TOKEN_BG = "Backdrop"
+TOKEN_SCENE = "scene"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -18,6 +21,9 @@ STMT_EMOTION = 4
 STMT_SHOW = 5
 STMT_HIDE = 6
 STMT_DIALOG = 7
+STMT_BACKDROPS = 8
+STMT_BG = 9
+STMT_SCENE = 10
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -27,6 +33,9 @@ LEN_EMOTION = 2
 LEN_SHOW = [4, 5]
 LEN_HIDE = 2
 LEN_DIALOG = [2, 3]
+LEN_BACKDROPS = 1
+LEN_BG = 4
+LEN_SCENE = 2
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -40,7 +49,7 @@ def checkSyntax(TYPE, STMT):
 			print(STMT)
 			raise Exception(SYNTAXERROR)
 	elif TYPE == STMT_POS or TYPE == STMT_CHAR:
-		if len(STMT) > LEN_POS or len(STMT) < LEN_POS:
+		if len(STMT) != LEN_POS:
 			print(STMT)
 			raise Exception(TOKENERROR)
 		else:
@@ -60,7 +69,7 @@ def checkSyntax(TYPE, STMT):
 	elif TYPE == STMT_CHARACTERS:
 		if len(STMT) != LEN_CHARACTERS:
 			print(STMT)
-			raise Exception(SYNTAXERROR)
+			raise Exception(TOKENERROR)
 	elif TYPE == STMT_EMOTION:
 		if len(STMT) != LEN_EMOTION:
 			print(STMT)
@@ -68,6 +77,24 @@ def checkSyntax(TYPE, STMT):
 		elif isString(STMT[1]):
 			print(STMT)
 			raise Exception(STRINGERROR)
+	elif TYPE == STMT_BACKDROPS:
+		if len(STMT) != LEN_BACKDROPS:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_BG:
+		if len(STMT) != LEN_BG:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		else:
+			if STMT[2] != TOKEN_EQ:
+				print(STMT)
+				raise Exception(SYNTAXERROR)
+			elif isString(STMT[1]):
+				print(STMT)
+				raise Exception(STRINGERROR)
+			elif not isString(STMT[3]):
+				print(STMT)
+				raise Exception(FINALSTRINGERROR)
 	elif TYPE == STMT_SHOW:
 		if not len(STMT) in LEN_SHOW:
 			print(STMT)
@@ -108,6 +135,13 @@ def checkSyntax(TYPE, STMT):
 				raise Exception(STRINGERROR)
 			elif not isString(STMT[2]):
 				raise Exception("String expected, got " + STMT[2])
+	elif TYPE == STMT_SCENE:
+		if len(STMT) != LEN_SCENE:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -121,6 +155,7 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	out = { }
 	chars = { }
 	temp = { }
+	bg = { }
 	currentCharName = ""
 	EM_INDEX = 0
 	dialogue = []
@@ -153,6 +188,15 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				raise Exception("Syntax Error: An Emotion was declared before its Character")
 			temp[statement[1]] = EM_INDEX
 			EM_INDEX += 1
+		elif statement[0] == TOKEN_BACKDROPS:
+			checkSyntax(STMT_BACKDROPS, statement)
+			if temp != { }:
+				chars[currentCharName] = temp
+				out["Characters"] = chars
+			temp = { }
+		elif statement[0] == TOKEN_BG:
+			checkSyntax(STMT_BG, statement)
+			bg[statement[1]] = statement[3]
 		else:
 			if temp != { }:
 				temp = { }
@@ -169,6 +213,10 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				checkSyntax(STMT_HIDE, statement)
 				temp["action"] = statement[0]
 				temp["char"] = statement[1]
+			elif statement[0] == TOKEN_SCENE:
+				checkSyntax(STMT_SCENE, statement)
+				temp["action"] = statement[0]
+				temp["scene"] = statement[1]
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
@@ -181,9 +229,8 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 					temp["emote"] = statement[1]
 					temp["String"] = statement[2]
 			dialogue.append(temp)
-	if chars != { }:
-		chars[currentCharName] = temp
-		out["Characters"] = chars
+	if bg != { }:
+		out["Backdrops"] = bg
 	if dialogue != []:
 		out["dialogue"] = dialogue
 	return out
