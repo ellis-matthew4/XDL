@@ -15,9 +15,7 @@ Things that currently work:
   
 Upcoming features:
   
-  1. New "Scene" and "Backdrop" keywords, for scripts and constants respectively
-  
-  2. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
+  1. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
   
 Things that might be worked on:
   
@@ -37,10 +35,16 @@ Character paul = "Paul" //The constructor for a Character object gives it a refe
 
 Emotion happy
 Emotion sad //The Emotion keyword is basically an enum in dictionary form. Characters["paul"]["happy"] will return 0, and Characters["paul"]["sad"] will return 1.
+
+BACKDROPS: //The Backdrops header declares the beginning of backdrop declarations
+
+Backdrop school = "School" //The constructor for a Backdrop object. Again, reference and the name of its controller Node
 ```
 
 Step 2: Write your scripts. Each section of dialogue should be its own script to minimize load time. There are five legal statements in SukiGD scripts so far:
 ```
+scene [Backdrop] //Swaps the current backdrop with the specified one.
+
 show [Character] [Emotion] at [Position] //Character, Emotion, and Position should all be constants declared in your constants file!
 
 show [Character] [Emotion] [Position] //A 3-character less verbose version of the previous statement, for the lazy
@@ -67,4 +71,4 @@ read(filename) # triggers a dialogue sequence. By default, this does not pause t
   
 State of the Software:
 
-Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system mostly works, I just need to have it actually load the text into the display. Iteration through statements is working as intended, and the enumerated display also works properly. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
+Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system works as intended. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
