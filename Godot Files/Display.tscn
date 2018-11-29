@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Display.gd" type="Script" id=1]
 [ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=2]
@@ -22,8 +22,9 @@
 [ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=20]
 [ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=21]
 [ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=22]
-[ext_resource path="res://assets/textbox.png" type="Texture" id=23]
-[ext_resource path="res://assets/namebox.png" type="Texture" id=24]
+[ext_resource path="res://assets/classroom.png" type="Texture" id=23]
+[ext_resource path="res://assets/textbox.png" type="Texture" id=24]
+[ext_resource path="res://assets/namebox.png" type="Texture" id=25]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -68,15 +69,27 @@ visible = false
 frames = SubResource( 2 )
 animation = "default"
 
-[node name="TextBox" type="Sprite" parent="." index="1"]
+[node name="Scenes" type="Node2D" parent="." index="1"]
+
+z_index = -1
+_sections_unfolded = [ "Z Index" ]
+
+[node name="School" type="Sprite" parent="Scenes" index="0"]
+
+visible = false
+texture = ExtResource( 23 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="TextBox" type="Sprite" parent="." index="2"]
 
 position = Vector2( 497.63, 485.267 )
-texture = ExtResource( 23 )
+texture = ExtResource( 24 )
 
 [node name="Namebox" type="Sprite" parent="TextBox" index="0"]
 
 position = Vector2( -296.562, -84.3432 )
-texture = ExtResource( 24 )
+texture = ExtResource( 25 )
 
 [node name="TextControl" type="Control" parent="TextBox" index="1"]
 
