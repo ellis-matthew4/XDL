@@ -21,7 +21,7 @@ func _ready():
 	
 func _process(delta):
 	if active: #Triggers upon a read() call
-		get_tree().call_group("playable_characters", "hideGUI") #Hides the HUD
+		# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
 		get_tree().paused = true #Remove this to disable pausing upon dialogue load
 		get_node("TextBox").visible = true
 		if Input.is_action_just_pressed("ui_select"):
@@ -58,7 +58,7 @@ func _process(delta):
 						current += 1
 						wait = false
 	else:
-		get_tree().call_group("playable_characters", "showGUI") #Shows the HUD
+		# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
 		get_tree().paused = false
 	
 func loadConstants(filename): # Load the constants to dictionaries for easy access
