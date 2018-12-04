@@ -3,7 +3,7 @@ A dialogue system that uses a simple scripting language based on RenPy, but comp
 
 NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
 
-Things that currently work:
+# Things that currently work:
 
   1. Transpiling from SukiGD to JSON
 
@@ -13,7 +13,7 @@ Things that currently work:
   
   4. The display system
   
-Upcoming features:
+# Upcoming features:
   
   1. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
   
@@ -21,7 +21,7 @@ Things that might be worked on:
   
   1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
   
-HOW IT WORKS (Video soon(TM)):
+# HOW IT WORKS (Video soon(TM)):
 
 Step 1: Create a constants.txt file similar to the example in the input folder. This should contain declarations for all of your positions and characters. This is kept in a separate file so that you can load it automatically when the dialogue system is initialized in Godot. You can find details on the syntax in the Wiki.
 
@@ -41,6 +41,6 @@ loadConstants(filename) # use this to load constants. You can call this more tha
 read(filename) # triggers a dialogue sequence. By default, this does not pause the game.
 ```
   
-State of the Software:
+# State of the Software:
 
 Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system works as intended. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
