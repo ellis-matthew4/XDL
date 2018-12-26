@@ -15,6 +15,11 @@ TOKEN_SCENE = "scene"
 TOKEN_LABEL = "label"
 TOKEN_RETURN = "return"
 TOKEN_SEMICOLON = ":"
+TOKEN_CALL = "call"
+TOKEN_JUMP = "jump"
+TOKEN_VAR = "var"
+TOKEN_MENU = "menu"
+TOKEN_OPTION = "option"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -29,6 +34,11 @@ STMT_BG = 9
 STMT_SCENE = 10
 STMT_LABEL = 11
 STMT_RETURN = 12
+STMT_CALL = 13
+STMT_JUMP = 14
+STMT_VAR = 15
+STMT_MENU = 16
+STMT_OPTION = 17
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -43,6 +53,11 @@ LEN_BG = 4
 LEN_SCENE = 2
 LEN_LABEL = 2
 LEN_RETURN = 1
+LEN_CALL = 2
+LEN_JUMP = 2
+LEN_VAR = 4
+LEN_MENU = 1
+LEN_OPTION = 2
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -161,6 +176,30 @@ def checkSyntax(TYPE, STMT):
 		if len(STMT) != LEN_RETURN:
 			print(STMT)
 			raise Exception(TOKENERROR)
+	elif TYPE == STMT_CALL:
+		if len(STMT) != LEN_CALL:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_JUMP:
+		if len(STMT) != LEN_JUMP:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_VAR:
+		if len(STMT) != LEN_VAR:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+		elif STMT[2] != TOKEN_EQ:
+			print(STMT)
+			raise Exception(SYNTAXERROR)
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -245,6 +284,19 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				checkSyntax(STMT_SCENE, statement)
 				temp["action"] = statement[0]
 				temp["scene"] = statement[1]
+			elif statement[0] == TOKEN_CALL:
+				checkSyntax(STMT_CALL, statement)
+				temp["action"] = statement[0]
+				temp["label"] = statement[1]
+			elif statement[0] == TOKEN_JUMP:
+				checkSyntax(STMT_JUMP, statement)
+				temp["action"] = statement[0]
+				temp["label"] = statement[1]
+			elif statement[0] == TOKEN_VAR:
+				checkSyntax(STMT_VAR, statement)
+				temp["action"] = statement[0]
+				temp["name"] = statement[1]
+				temp["value"] = statement[3]
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):

@@ -1,1 +1,72 @@
-{"labels": {"start": [{"action": "scene", "scene": "school"}, {"action": "show", "char": "harry", "emote": "neutral", "pos": "left"}, {"action": "show", "char": "kayla", "emote": "neutral", "pos": "right"}, {"action": "dialogue", "char": "harry", "String": "\"This is a test.\""}, {"action": "dialogue", "char": "kayla", "emote": "happy", "String": "\"So it is.\""}, {"action": "dialogue", "char": "harry", "emote": "sad", "String": "\"It's pretty boring though.\""}, {"action": "dialogue", "char": "kayla", "emote": "sad", "String": "\"So it is.\""}], "next": [{"action": "scene", "scene": "school"}, {"action": "show", "char": "harry", "emote": "neutral", "pos": "left"}, {"action": "dialogue", "char": "harry", "String": "\"This is another scene\""}]}}
+{
+	"labels": {
+		"start": [
+			{
+				"action": "scene",
+				"scene": "school"
+			},
+			{
+				"action": "show",
+				"char": "harry",
+				"emote": "neutral",
+				"pos": "left"
+			},
+			{
+				"action": "show",
+				"char": "kayla",
+				"emote": "neutral",
+				"pos": "right"
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"This is a test.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"emote": "happy",
+				"String": "\"So it is.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"emote": "sad",
+				"String": "\"It's pretty boring though.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"emote": "sad",
+				"String": "\"So it is.\""
+			},
+			{
+				"action": "call",
+				"label": "next"
+			}
+		],
+		"final": [
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"This is the final scene\""
+			},
+			{
+				"action": "var",
+				"name": "finished",
+				"value": "true"
+			}
+		],
+		"next": [
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"This is another scene\""
+			},
+			{
+				"action": "jump",
+				"label": "final"
+			}
+		]
+	}
+}

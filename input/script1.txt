@@ -6,10 +6,15 @@ label start:
 	kayla happy "So it is."
 	harry sad "It's pretty boring though."
 	kayla sad "So it is."
+	call next
 	return
 
 label next:
-	scene school
-	show harry neutral at left
 	harry "This is another scene"
+	jump final
+	return
+	
+label final:
+	kayla "This is the final scene"
+	var finished = true
 	return
