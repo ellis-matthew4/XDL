@@ -1,7 +1,15 @@
-scene school
-show harry neutral at left
-show kayla neutral at right
-harry "This is a test."
-kayla happy "So it is."
-harry sad "It's pretty boring though."
-kayla sad "So it is."
+label start:
+	scene school
+	show harry neutral at left
+	show kayla neutral at right
+	harry "This is a test."
+	kayla happy "So it is."
+	harry sad "It's pretty boring though."
+	kayla sad "So it is."
+	return
+
+label next:
+	scene school
+	show harry neutral at left
+	harry "This is another scene"
+	return

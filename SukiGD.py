@@ -12,6 +12,9 @@ TOKEN_EQ = "="
 TOKEN_BACKDROPS = "BACKDROPS:"
 TOKEN_BG = "Backdrop"
 TOKEN_SCENE = "scene"
+TOKEN_LABEL = "label"
+TOKEN_RETURN = "return"
+TOKEN_SEMICOLON = ":"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -24,6 +27,8 @@ STMT_DIALOG = 7
 STMT_BACKDROPS = 8
 STMT_BG = 9
 STMT_SCENE = 10
+STMT_LABEL = 11
+STMT_RETURN = 12
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -36,6 +41,8 @@ LEN_DIALOG = [2, 3]
 LEN_BACKDROPS = 1
 LEN_BG = 4
 LEN_SCENE = 2
+LEN_LABEL = 2
+LEN_RETURN = 1
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -134,6 +141,7 @@ def checkSyntax(TYPE, STMT):
 				print(STMT)
 				raise Exception(STRINGERROR)
 			elif not isString(STMT[2]):
+				print(STMT)
 				raise Exception("String expected, got " + STMT[2])
 	elif TYPE == STMT_SCENE:
 		if len(STMT) != LEN_SCENE:
@@ -142,6 +150,17 @@ def checkSyntax(TYPE, STMT):
 		elif isString(STMT[1]):
 			print(STMT)
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_LABEL:
+		if len(STMT) != LEN_LABEL:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_RETURN:
+		if len(STMT) != LEN_RETURN:
+			print(STMT)
+			raise Exception(TOKENERROR)
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -153,14 +172,23 @@ def isString(s): #Checks to see if the token is of type TOKEN_STRING
 def parse(filename): #Takes the list of tokens created by the scan function and turns them into a dictionary
 	statements = scan('input/' + filename)
 	out = { }
+	labels = { }
 	chars = { }
 	temp = { }
 	bg = { }
 	currentCharName = ""
+	currentLabel = ""
 	EM_INDEX = 0
 	dialogue = []
 	for statement in statements:
-		if statement[0] == TOKEN_POSITIONS:
+		if statement[0] == TOKEN_LABEL:
+			checkSyntax(STMT_LABEL, statement)
+			currentLabel = statement[1][:-1]
+		elif statement[0] == TOKEN_RETURN:
+			checkSyntax(STMT_RETURN, statement)
+			labels[currentLabel] = dialogue
+			dialogue = []
+		elif statement[0] == TOKEN_POSITIONS:
 			checkSyntax(STMT_POSITIONS, statement)
 			temp = { }
 		elif statement[0] == TOKEN_POS:
@@ -231,19 +259,22 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 			dialogue.append(temp)
 	if bg != { }:
 		out["Backdrops"] = bg
-	if dialogue != []:
-		out["dialogue"] = dialogue
+	if labels != { }:
+		out["labels"] = labels
 	return out
 
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
 	lines = []
-	lineNum = 0
 	string = False
 	for line in f.readlines():
+		if line.strip() == "":
+			continue
 		l = []
 		word = ""
 		for c in line:
+			if c == "\t":
+				continue
 			if not string:
 				if c == " " or c == "\n" or c == "\r":
 					l.append(word)
