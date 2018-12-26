@@ -5,6 +5,8 @@ onready var charNodes = get_node("Characters")
 onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
 
+var fade = preload("res://shaders/TransitionFade.tscn") # path to the SukiGD fade in/out transition file. To change transition, change this file
+
 var constants
 var positions = {}
 var characters = {}
@@ -39,10 +41,9 @@ func _process(delta):
 					Scene(statement)
 				current += 1
 			else: # Reset and prepare for the next dialogue
-				hideAll()
-				current = 0
-				active = false
-				wait = true
+				var f = fade.instance()
+				add_child(f)
+				f.connect("faded", self, "fadeDone")
 		else:
 			if wait: #This block of code prevents having to click for show and hide statements.
 				if current < len(dialogue):
@@ -52,6 +53,9 @@ func _process(delta):
 						current += 1
 					elif statement["action"] == "hide":
 						Hide(statement)
+						current += 1
+					elif statement["action"] == "scene":
+						Scene(statement)
 						current += 1
 					elif statement["action"] == "dialogue":
 						dialogue(statement)
@@ -63,7 +67,7 @@ func _process(delta):
 	
 func loadConstants(filename): # Load the constants to dictionaries for easy access
 	var file = File.new()
-	file.open("res://SukiGD/dialogue/" + filename, File.READ)
+	file.open("res://SukiGD/output/" + filename, File.READ)
 	var data = file.get_as_text()
 	file.close()
 	data = JSON.parse(data)
@@ -87,7 +91,7 @@ func loadConstants(filename): # Load the constants to dictionaries for easy acce
 	
 func read(filename):
 	var file = File.new()
-	file.open("res://SukiGD/dialogue/" + filename, File.READ) #Default filepath, you probably want to change this
+	file.open("res://SukiGD/output/" + filename, File.READ) #Default filepath, you probably want to change this
 	var data = file.get_as_text()
 	file.close()
 	data = JSON.parse(data)
@@ -95,7 +99,10 @@ func read(filename):
 		print("FAILED TO READ FILE " + filename)
 		return
 	dialogue = data.result["dialogue"]
-	active = true #Activate the dialogue loop
+	
+	var f = fade.instance()
+	add_child(f)
+	f.connect("faded", self, "fadeReady")
 			
 func Show(s): # Show statement
 	var c = charNodes.get_node(characters[s["char"]]["path"])
@@ -129,3 +136,14 @@ func Scene(s): # Changes the backdrop to the current scene
 		sc.visible = false
 	var sceneName = backdrops[s["scene"]]
 	get_node("Scenes/" + sceneName).visible = true
+	
+func fadeReady():
+	active = true
+	
+func fadeDone():
+	hideAll()
+	active = false
+	current = 0
+	wait = true
+	yield(get_tree().create_timer(0.5), "timeout")
+	# get_parent().remove_child(self) # uncomment if this is a singleton!
