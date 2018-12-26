@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform float cutoff : hint_range(0.0,1.0);
+
+uniform vec4 color : hint_color;
+
+void fragment() {
+	COLOR = vec4(color.rgb, cutoff);
+	}"
+
+[resource]
+
+render_priority = 0
+shader = SubResource( 1 )
+shader_param/cutoff = 0.0
+shader_param/color = Color( 0, 0, 0, 1 )
+_sections_unfolded = [ "shader_param" ]
+
