@@ -52,33 +52,6 @@
 				"String": "\"This is the final scene\""
 			},
 			{
-				"action": "menu",
-				"\"No\"": [
-					{
-						"action": "dialogue",
-						"char": "harry",
-						"String": "\"I told you.\""
-					},
-					{
-						"action": "dialogue",
-						"char": "kayla",
-						"String": "\"I see...\""
-					}
-				],
-				"\"Yes\"": [
-					{
-						"action": "dialogue",
-						"char": "kayla",
-						"String": "\"That's good.\""
-					},
-					{
-						"action": "dialogue",
-						"char": "harry",
-						"String": "\"I didn't.\""
-					}
-				]
-			},
-			{
 				"action": "var",
 				"name": "finished",
 				"value": "true"

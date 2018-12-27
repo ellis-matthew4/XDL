@@ -16,5 +16,15 @@ label next:
 	
 label final:
 	kayla "This is the final scene"
+	menu:
+		option "Yes":
+			kayla "That's good."
+			harry "I didn't."
+			return
+		option "No":
+			harry "I told you."
+			kayla "I see..."
+			return
+		end
 	var finished = true
 	return

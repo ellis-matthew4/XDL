@@ -18,8 +18,9 @@ TOKEN_SEMICOLON = ":"
 TOKEN_CALL = "call"
 TOKEN_JUMP = "jump"
 TOKEN_VAR = "var"
-TOKEN_MENU = "menu"
+TOKEN_MENU = "menu:"
 TOKEN_OPTION = "option"
+TOKEN_END = "end"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -39,6 +40,7 @@ STMT_JUMP = 14
 STMT_VAR = 15
 STMT_MENU = 16
 STMT_OPTION = 17
+STMT_END = 18
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -58,6 +60,7 @@ LEN_JUMP = 2
 LEN_VAR = 4
 LEN_MENU = 1
 LEN_OPTION = 2
+LEN_END = 1
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -200,6 +203,21 @@ def checkSyntax(TYPE, STMT):
 		elif STMT[2] != TOKEN_EQ:
 			print(STMT)
 			raise Exception(SYNTAXERROR)
+	elif TYPE == STMT_MENU:
+		if len(STMT) != LEN_MENU:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_END:
+		if len(STMT) != LEN_END:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_OPTION:
+		if len(STMT) != LEN_OPTION:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		if not isString(STMT[1][:-1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Expected String.")
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -215,18 +233,38 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	chars = { }
 	temp = { }
 	bg = { }
+	menu = { "action":"menu" }
 	currentCharName = ""
 	currentLabel = ""
+	currentOption = ""
 	EM_INDEX = 0
 	dialogue = []
+	storage = []
 	for statement in statements:
 		if statement[0] == TOKEN_LABEL:
 			checkSyntax(STMT_LABEL, statement)
 			currentLabel = statement[1][:-1]
 		elif statement[0] == TOKEN_RETURN:
 			checkSyntax(STMT_RETURN, statement)
-			labels[currentLabel] = dialogue
+			if currentOption == "":
+				labels[currentLabel] = dialogue
+				dialogue = []
+			else:
+				menu[currentOption] = dialogue
+				dialogue = []
+		elif statement[0] == TOKEN_END:
+			checkSyntax(STMT_END, statement)
+			currentOption = ""
+			dialogue = storage
+			dialogue.append(menu)
+			storage = []
+			menu = { "action":"menu" }
+		elif statement[0] == TOKEN_MENU:
+			storage = dialogue
 			dialogue = []
+		elif statement[0] == TOKEN_OPTION:
+			checkSyntax(STMT_OPTION, statement)
+			currentOption = statement[1][:-1]
 		elif statement[0] == TOKEN_POSITIONS:
 			checkSyntax(STMT_POSITIONS, statement)
 			temp = { }
