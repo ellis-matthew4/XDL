@@ -4,6 +4,7 @@ label start:
 	show kayla neutral at right
 	harry "This is a test."
 	kayla happy "So it is."
+	var k = 1
 	harry sad "It's pretty boring though."
 	kayla sad "So it is."
 	call next
@@ -16,6 +17,7 @@ label next:
 	
 label final:
 	kayla "This is the final scene"
+	harry "Did you like this demo?"
 	menu:
 		option "Yes":
 			kayla "That's good."
@@ -27,4 +29,5 @@ label final:
 			return
 		end
 	var finished = true
+	harry "Test to see if variables are being skipped properly."
 	return

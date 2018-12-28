@@ -4,17 +4,18 @@ onready var projectRes = Vector2(ProjectSettings.get_setting("display/window/siz
 onready var charNodes = get_node("Characters")
 onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
-
-var fade = preload("res://shaders/TransitionFade.tscn") # path to the SukiGD fade in/out transition file. To change transition, change this file
+var choice = preload("res://Choice.tscn")
 
 var constants
+var menuDict
 var positions = {}
 var characters = {}
 var backdrops = {}
 var labels = {}
+var variables = {}
 var stack = []
 var wait = false
-var variables = {}
+var active = true
 
 var path_to_folder = "res://output/"
 
@@ -25,27 +26,25 @@ func _ready():
 	jump("start")
 	
 func _process(delta):
-	if len(stack) > 0: #Triggers upon calling or jumping
-		# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
-		get_tree().paused = true #Remove this to disable pausing upon dialogue load
-		get_node("TextBox").visible = true
-		if Input.is_action_just_pressed("ui_select"):
-			if len(stack[0]) > 0:
-				var statement = stack[0].pop_front()
-				statement(statement)
-			else: # Reset and prepare for the next dialogue
+	if active:
+		if len(stack) > 0: #Triggers upon calling or jumping
+			# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
+			get_tree().paused = true #Remove this to disable pausing upon dialogue load
+			get_node("TextBox").visible = true
+			if len(stack[0]) == 0:
 				stack.pop_front()
-		else:
-			if wait: #This block of code prevents having to click for show and hide statements.
-				if len(stack[0]) > 0:
-					var statement = stack[0].pop_front()
-					statement(statement)
-				else:
-					stack.pop_front()
-	else:
-		end()
-		# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
-		get_tree().paused = false
+			if wait:
+				var statement = stack[0].pop_front()
+				print(statement)
+				statement(statement)
+			elif Input.is_action_just_pressed("ui_select"):
+				var statement = stack[0].pop_front()
+				print(statement)
+				statement(statement)
+		elif Input.is_action_just_pressed("ui_select"):
+			end()
+			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
+			get_tree().paused = false
 	
 func loadConstants(filename): # Load the constants to dictionaries for easy access
 	var file = File.new()
@@ -98,6 +97,13 @@ func statement(statement):
 			jump(statement["label"])
 		"var":
 			variable(statement)
+		"menu":
+			print("Menu detected")
+			menuDict = statement
+			for k in statement.keys():
+				if k != "action":
+					option(k)
+			menu()
 		_:
 			print("Weird flex but ok")
 	
@@ -105,9 +111,6 @@ func call(label):
 	wait = true
 	push(label)
 	print("Calling label " + label)
-#	var f = fade.instance()
-#	add_child(f)
-#	f.connect("faded", self, "fadeReadyCall", [label])
 	
 func jump(label):
 	wait = true
@@ -118,9 +121,10 @@ func push(label):
 	print("Adding label " + label + " to the stack.")
 	stack.push_front(labels[label])
 	
-func pop():
-	return stack.pop_front()
-			
+func pushList(l):
+	print("Adding anonymous label to the stack.")
+	stack.push_front(l)
+	
 func Show(s): # Show statement
 	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
@@ -165,8 +169,30 @@ func end():
 	# get_parent().remove_child(self) # uncomment if this is a singleton!
 	
 func variable(s):
+	print("Assigning variable")
 	wait = true
 	variables[s["name"]] = s["value"]
 	
 func get(variable):
 	return variables[variable]
+	
+func option(o):
+	var c = choice.instance()
+	$Menu.add_child(c)
+	c.text = o
+	c.connect("interact", self, "menu_interact", [o])
+	
+func menu():
+	wait = true
+	$Menu.visible = true
+	$TextBox.visible = false
+	active = false
+	
+func menu_interact(o):
+	pushList(menuDict[o])
+	$Menu.visible = false
+	$TextBox.visible = true
+	active = true
+	for c in $Menu.get_children():
+		c.queue_free()
+	menuDict = {}
