@@ -35,11 +35,9 @@ func _process(delta):
 				stack.pop_front()
 			if wait:
 				var statement = stack[0].pop_front()
-				print(statement)
 				statement(statement)
 			elif Input.is_action_just_pressed("ui_select"):
 				var statement = stack[0].pop_front()
-				print(statement)
 				statement(statement)
 		elif Input.is_action_just_pressed("ui_select"):
 			end()
@@ -98,7 +96,7 @@ func statement(statement):
 		"var":
 			variable(statement)
 		"menu":
-			print("Menu detected")
+#			print("Menu detected")
 			menuDict = statement
 			for k in statement.keys():
 				if k != "action":
@@ -110,20 +108,20 @@ func statement(statement):
 func call(label):
 	wait = true
 	push(label)
-	print("Calling label " + label)
+#	print("Calling label " + label)
 	
 func jump(label):
 	wait = true
 	stack = [labels[label].duplicate()]
-	print("Jumping to label " + label)
+#	print("Jumping to label " + label)
 	
 func push(label):
-	print("Adding label " + label + " to the stack.")
+#	print("Adding label " + label + " to the stack.")
 	var label2 = labels[label].duplicate()
 	stack.push_front(label2)
 	
 func pushList(l):
-	print("Adding anonymous label to the stack.")
+#	print("Adding anonymous label to the stack.")
 	var l2 = l.duplicate()
 	stack.push_front(l2)
 	
@@ -171,7 +169,7 @@ func end():
 	# get_parent().remove_child(self) # uncomment if this is a singleton!
 	
 func variable(s):
-	print("Assigning variable")
+#	print("Assigning variable")
 	wait = true
 	variables[s["name"]] = s["value"]
 	
