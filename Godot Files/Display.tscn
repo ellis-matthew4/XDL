@@ -1,27 +1,27 @@
 [gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Display.gd" type="Script" id=1]
-[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=2]
-[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=3]
-[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=4]
-[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=5]
-[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=6]
-[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=7]
-[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=8]
+[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=2]
+[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=3]
+[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=4]
+[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=5]
+[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=6]
+[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=7]
+[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=8]
 [ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=9]
-[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=10]
-[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=11]
-[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=12]
-[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=13]
-[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=14]
-[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=15]
-[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=16]
-[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=17]
-[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=18]
-[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=19]
-[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=20]
+[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=10]
+[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=11]
+[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=12]
+[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=13]
+[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=14]
+[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=15]
+[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=16]
+[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=17]
+[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=18]
+[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=19]
+[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=20]
 [ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=21]
-[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=22]
+[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=22]
 [ext_resource path="res://assets/classroom.png" type="Texture" id=23]
 [ext_resource path="res://assets/textbox.png" type="Texture" id=24]
 [ext_resource path="res://assets/namebox.png" type="Texture" id=25]
@@ -29,18 +29,113 @@
 [sub_resource type="SpriteFrames" id=1]
 
 animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "default",
+"name": "laugh",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "cry",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "bloody2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "bloody3",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "sad",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "mad",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "shy",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "happy",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "bloody1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "smug",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 13 ) ],
+"loop": true,
+"name": "shock",
 "speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=2]
 
 animations = [ {
-"frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ) ],
+"frames": [ ExtResource( 14 ) ],
 "loop": true,
-"name": "default",
+"name": "think",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 15 ) ],
+"loop": true,
+"name": "laugh",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 16 ) ],
+"loop": true,
+"name": "cry",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ) ],
+"loop": true,
+"name": "sad",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 18 ) ],
+"loop": true,
+"name": "mad",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 19 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 20 ) ],
+"loop": true,
+"name": "happy",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 21 ) ],
+"loop": true,
+"name": "smug",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 22 ) ],
+"loop": true,
+"name": "shock",
 "speed": 5.0
 } ]
 
@@ -57,19 +152,17 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="Characters" type="Node2D" parent="." index="0"]
 
-editor/display_folded = true
-
 [node name="Harry" type="AnimatedSprite" parent="Characters" index="0"]
 
 visible = false
 frames = SubResource( 1 )
-animation = "default"
+animation = "bloody1"
 
 [node name="Kayla" type="AnimatedSprite" parent="Characters" index="1"]
 
 visible = false
 frames = SubResource( 2 )
-animation = "default"
+animation = "cry"
 
 [node name="Scenes" type="Node2D" parent="." index="1"]
 

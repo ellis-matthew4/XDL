@@ -131,7 +131,7 @@ func Show(s): # Show statement
 	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = positions[s["pos"]]
-	c.frame = characters[s["char"]][s["emote"]]
+	c.play(s["emote"])
 	c.visible = true
 	
 func Hide(s): # Hide statement
@@ -153,7 +153,7 @@ func dialogue(s): # Displays a line of dialogue
 	wait = false
 	if s.has("emote"):
 		var c = charNodes.get_node(characters[s["char"]]["path"])
-		c.frame = characters[s["char"]][s["emote"]]
+		c.play(s["emote"])
 	textBox.text = s["String"]
 	nameBox.text = s["char"].capitalize()
 	
