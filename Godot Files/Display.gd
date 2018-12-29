@@ -114,16 +114,18 @@ func call(label):
 	
 func jump(label):
 	wait = true
-	stack = [labels[label]]
+	stack = [labels[label].duplicate()]
 	print("Jumping to label " + label)
 	
 func push(label):
 	print("Adding label " + label + " to the stack.")
-	stack.push_front(labels[label])
+	var label2 = labels[label].duplicate()
+	stack.push_front(label2)
 	
 func pushList(l):
 	print("Adding anonymous label to the stack.")
-	stack.push_front(l)
+	var l2 = l.duplicate()
+	stack.push_front(l2)
 	
 func Show(s): # Show statement
 	wait = true
