@@ -334,7 +334,10 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				checkSyntax(STMT_VAR, statement)
 				temp["action"] = statement[0]
 				temp["name"] = statement[1]
-				temp["value"] = statement[3]
+				if statement[3] == "true" or statement[3] == "false":
+					temp["value"] = eval(statement[3].capitalize())
+				else:
+					temp["value"] = eval(statement[3])
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
