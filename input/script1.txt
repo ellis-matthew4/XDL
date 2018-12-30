@@ -28,6 +28,6 @@ label final:
 			kayla "I see..."
 			return
 		end
-	var finished = true
+	var num = 5
 	harry "Test to see if variables are being skipped properly."
 	return

@@ -237,7 +237,6 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	currentCharName = ""
 	currentLabel = ""
 	currentOption = ""
-	EM_INDEX = 0
 	dialogue = []
 	storage = []
 	for statement in statements:
@@ -287,12 +286,6 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				EM_INDEX = 0
 			currentCharName = statement[1]
 			temp["path"] = statement[3]
-		elif statement[0] == TOKEN_EMOTION:
-			checkSyntax(STMT_EMOTION, statement)
-			if temp == { }:
-				raise Exception("Syntax Error: An Emotion was declared before its Character")
-			temp[statement[1]] = EM_INDEX
-			EM_INDEX += 1
 		elif statement[0] == TOKEN_BACKDROPS:
 			checkSyntax(STMT_BACKDROPS, statement)
 			if temp != { }:
