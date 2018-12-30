@@ -4,70 +4,49 @@ onready var projectRes = Vector2(ProjectSettings.get_setting("display/window/siz
 onready var charNodes = get_node("Characters")
 onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
-
-var fade = preload("res://shaders/TransitionFade.tscn") # path to the SukiGD fade in/out transition file. To change transition, change this file
+var choice = preload("res://Choice.tscn")
 
 var constants
+var menuDict
 var positions = {}
 var characters = {}
 var backdrops = {}
-var dialogue = []
-var current = 0
-var active = false
-var click = false
-var wait = true
+var labels = {}
+var variables = {}
+var stack = []
+var wait = false
+var active = true
+
+var path_to_folder = "res://output/"
 
 func _ready():
 	loadConstants("constants.json") #Only run this command when necessary!
 	set_process(true)
+	read("script1.json")
+	jump("start")
 	
 func _process(delta):
-	if active: #Triggers upon a read() call
-		# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
-		get_tree().paused = true #Remove this to disable pausing upon dialogue load
-		get_node("TextBox").visible = true
-		if Input.is_action_just_pressed("ui_select"):
-			if current < len(dialogue):
-				var statement = dialogue[current]
-				if statement["action"] == "show":
-					Show(statement)
-					wait = true
-				elif statement["action"] == "hide":
-					Hide(statement)
-					wait = true
-				elif statement["action"] == "dialogue":
-					dialogue(statement)
-				elif statement["action"] == "scene":
-					Scene(statement)
-				current += 1
-			else: # Reset and prepare for the next dialogue
-				var f = fade.instance()
-				add_child(f)
-				f.connect("faded", self, "fadeDone")
-		else:
-			if wait: #This block of code prevents having to click for show and hide statements.
-				if current < len(dialogue):
-					var statement = dialogue[current]
-					if statement["action"] == "show":
-						Show(statement)
-						current += 1
-					elif statement["action"] == "hide":
-						Hide(statement)
-						current += 1
-					elif statement["action"] == "scene":
-						Scene(statement)
-						current += 1
-					elif statement["action"] == "dialogue":
-						dialogue(statement)
-						current += 1
-						wait = false
-	else:
-		# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
-		get_tree().paused = false
+	if active:
+		if len(stack) > 0: #Triggers upon calling or jumping
+			# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
+			get_tree().paused = true #Remove this to disable pausing upon dialogue load
+			get_node("TextBox").visible = true
+			if len(stack[0]) == 0:
+				stack.pop_front()
+			if wait:
+				var statement = stack[0].pop_front()
+				statement(statement)
+			elif Input.is_action_just_pressed("ui_select"):
+				var statement = stack[0].pop_front()
+				statement(statement)
+		elif Input.is_action_just_pressed("ui_select"):
+			end()
+			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
+			get_tree().paused = false
 	
 func loadConstants(filename): # Load the constants to dictionaries for easy access
 	var file = File.new()
-	file.open("res://SukiGD/output/" + filename, File.READ)
+	file.open(path_to_folder + filename, File.READ)
 	var data = file.get_as_text()
 	file.close()
 	data = JSON.parse(data)
@@ -91,26 +70,70 @@ func loadConstants(filename): # Load the constants to dictionaries for easy acce
 	
 func read(filename):
 	var file = File.new()
-	file.open("res://SukiGD/output/" + filename, File.READ) #Default filepath, you probably want to change this
+	file.open(path_to_folder + filename, File.READ) #Default filepath, you probably want to change this
 	var data = file.get_as_text()
 	file.close()
 	data = JSON.parse(data)
 	if data.error != OK:
 		print("FAILED TO READ FILE " + filename)
 		return
-	dialogue = data.result["dialogue"]
+	labels = data.result["labels"]
 	
-	var f = fade.instance()
-	add_child(f)
-	f.connect("faded", self, "fadeReady")
-			
+func statement(statement):
+	match statement["action"]:
+		"show":
+			Show(statement)
+		"hide":
+			Hide(statement)
+		"dialogue":
+			dialogue(statement)
+		"scene":
+			Scene(statement)
+		"call":
+			call(statement["label"])
+		"jump":
+			jump(statement["label"])
+		"var":
+			variable(statement)
+		"menu":
+#			print("Menu detected")
+			menuDict = statement
+			for k in statement.keys():
+				if k != "action":
+					option(k)
+			menu()
+		_:
+			print("Weird flex but ok")
+	
+func call(label):
+	wait = true
+	push(label)
+#	print("Calling label " + label)
+	
+func jump(label):
+	wait = true
+	stack = [labels[label].duplicate()]
+#	print("Jumping to label " + label)
+	
+func push(label):
+#	print("Adding label " + label + " to the stack.")
+	var label2 = labels[label].duplicate()
+	stack.push_front(label2)
+	
+func pushList(l):
+#	print("Adding anonymous label to the stack.")
+	var l2 = l.duplicate()
+	stack.push_front(l2)
+	
 func Show(s): # Show statement
+	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = positions[s["pos"]]
-	c.frame = characters[s["char"]][s["emote"]]
+	c.play(s["emote"])
 	c.visible = true
 	
 func Hide(s): # Hide statement
+	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = Vector2(0,0)
 	c.visible = false
@@ -125,25 +148,51 @@ func hideAll(): # Hides SukiGD
 		sc.visible = false
 		
 func dialogue(s): # Displays a line of dialogue
+	wait = false
 	if s.has("emote"):
 		var c = charNodes.get_node(characters[s["char"]]["path"])
-		c.frame = characters[s["char"]][s["emote"]]
+		c.play(s["emote"])
 	textBox.text = s["String"]
 	nameBox.text = s["char"].capitalize()
 	
 func Scene(s): # Changes the backdrop to the current scene
+	wait = true
 	for sc in $Scenes.get_children():
 		sc.visible = false
 	var sceneName = backdrops[s["scene"]]
 	get_node("Scenes/" + sceneName).visible = true
-	
-func fadeReady():
-	active = true
-	
-func fadeDone():
+		
+func end():
 	hideAll()
-	active = false
-	current = 0
 	wait = true
 	yield(get_tree().create_timer(0.5), "timeout")
 	# get_parent().remove_child(self) # uncomment if this is a singleton!
+	
+func variable(s):
+#	print("Assigning variable")
+	wait = true
+	variables[s["name"]] = s["value"]
+	
+func get(variable):
+	return variables[variable]
+	
+func option(o):
+	var c = choice.instance()
+	$Menu.add_child(c)
+	c.text = o
+	c.connect("interact", self, "menu_interact", [o])
+	
+func menu():
+	wait = true
+	$Menu.visible = true
+	$TextBox.visible = false
+	active = false
+	
+func menu_interact(o):
+	pushList(menuDict[o])
+	$Menu.visible = false
+	$TextBox.visible = true
+	active = true
+	for c in $Menu.get_children():
+		c.queue_free()
+	menuDict = {}

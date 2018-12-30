@@ -12,6 +12,15 @@ TOKEN_EQ = "="
 TOKEN_BACKDROPS = "BACKDROPS:"
 TOKEN_BG = "Backdrop"
 TOKEN_SCENE = "scene"
+TOKEN_LABEL = "label"
+TOKEN_RETURN = "return"
+TOKEN_SEMICOLON = ":"
+TOKEN_CALL = "call"
+TOKEN_JUMP = "jump"
+TOKEN_VAR = "var"
+TOKEN_MENU = "menu:"
+TOKEN_OPTION = "option"
+TOKEN_END = "end"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -24,6 +33,14 @@ STMT_DIALOG = 7
 STMT_BACKDROPS = 8
 STMT_BG = 9
 STMT_SCENE = 10
+STMT_LABEL = 11
+STMT_RETURN = 12
+STMT_CALL = 13
+STMT_JUMP = 14
+STMT_VAR = 15
+STMT_MENU = 16
+STMT_OPTION = 17
+STMT_END = 18
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -36,6 +53,14 @@ LEN_DIALOG = [2, 3]
 LEN_BACKDROPS = 1
 LEN_BG = 4
 LEN_SCENE = 2
+LEN_LABEL = 2
+LEN_RETURN = 1
+LEN_CALL = 2
+LEN_JUMP = 2
+LEN_VAR = 4
+LEN_MENU = 1
+LEN_OPTION = 2
+LEN_END = 1
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -134,6 +159,7 @@ def checkSyntax(TYPE, STMT):
 				print(STMT)
 				raise Exception(STRINGERROR)
 			elif not isString(STMT[2]):
+				print(STMT)
 				raise Exception("String expected, got " + STMT[2])
 	elif TYPE == STMT_SCENE:
 		if len(STMT) != LEN_SCENE:
@@ -142,6 +168,56 @@ def checkSyntax(TYPE, STMT):
 		elif isString(STMT[1]):
 			print(STMT)
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_LABEL:
+		if len(STMT) != LEN_LABEL:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_RETURN:
+		if len(STMT) != LEN_RETURN:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_CALL:
+		if len(STMT) != LEN_CALL:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_JUMP:
+		if len(STMT) != LEN_JUMP:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_VAR:
+		if len(STMT) != LEN_VAR:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		elif isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+		elif STMT[2] != TOKEN_EQ:
+			print(STMT)
+			raise Exception(SYNTAXERROR)
+	elif TYPE == STMT_MENU:
+		if len(STMT) != LEN_MENU:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_END:
+		if len(STMT) != LEN_END:
+			print(STMT)
+			raise Exception(TOKENERROR)
+	elif TYPE == STMT_OPTION:
+		if len(STMT) != LEN_OPTION:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		if not isString(STMT[1][:-1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Expected String.")
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -153,14 +229,42 @@ def isString(s): #Checks to see if the token is of type TOKEN_STRING
 def parse(filename): #Takes the list of tokens created by the scan function and turns them into a dictionary
 	statements = scan('input/' + filename)
 	out = { }
+	labels = { }
 	chars = { }
 	temp = { }
 	bg = { }
+	menu = { "action":"menu" }
 	currentCharName = ""
-	EM_INDEX = 0
+	currentLabel = ""
+	currentOption = ""
 	dialogue = []
+	storage = []
 	for statement in statements:
-		if statement[0] == TOKEN_POSITIONS:
+		if statement[0] == TOKEN_LABEL:
+			checkSyntax(STMT_LABEL, statement)
+			currentLabel = statement[1][:-1]
+		elif statement[0] == TOKEN_RETURN:
+			checkSyntax(STMT_RETURN, statement)
+			if currentOption == "":
+				labels[currentLabel] = dialogue
+				dialogue = []
+			else:
+				menu[currentOption] = dialogue
+				dialogue = []
+		elif statement[0] == TOKEN_END:
+			checkSyntax(STMT_END, statement)
+			currentOption = ""
+			dialogue = storage
+			dialogue.append(menu)
+			storage = []
+			menu = { "action":"menu" }
+		elif statement[0] == TOKEN_MENU:
+			storage = dialogue
+			dialogue = []
+		elif statement[0] == TOKEN_OPTION:
+			checkSyntax(STMT_OPTION, statement)
+			currentOption = statement[1][:-1]
+		elif statement[0] == TOKEN_POSITIONS:
 			checkSyntax(STMT_POSITIONS, statement)
 			temp = { }
 		elif statement[0] == TOKEN_POS:
@@ -182,12 +286,6 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				EM_INDEX = 0
 			currentCharName = statement[1]
 			temp["path"] = statement[3]
-		elif statement[0] == TOKEN_EMOTION:
-			checkSyntax(STMT_EMOTION, statement)
-			if temp == { }:
-				raise Exception("Syntax Error: An Emotion was declared before its Character")
-			temp[statement[1]] = EM_INDEX
-			EM_INDEX += 1
 		elif statement[0] == TOKEN_BACKDROPS:
 			checkSyntax(STMT_BACKDROPS, statement)
 			if temp != { }:
@@ -217,6 +315,22 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				checkSyntax(STMT_SCENE, statement)
 				temp["action"] = statement[0]
 				temp["scene"] = statement[1]
+			elif statement[0] == TOKEN_CALL:
+				checkSyntax(STMT_CALL, statement)
+				temp["action"] = statement[0]
+				temp["label"] = statement[1]
+			elif statement[0] == TOKEN_JUMP:
+				checkSyntax(STMT_JUMP, statement)
+				temp["action"] = statement[0]
+				temp["label"] = statement[1]
+			elif statement[0] == TOKEN_VAR:
+				checkSyntax(STMT_VAR, statement)
+				temp["action"] = statement[0]
+				temp["name"] = statement[1]
+				if statement[3] == "true" or statement[3] == "false":
+					temp["value"] = eval(statement[3].capitalize())
+				else:
+					temp["value"] = eval(statement[3])
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
@@ -231,19 +345,22 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 			dialogue.append(temp)
 	if bg != { }:
 		out["Backdrops"] = bg
-	if dialogue != []:
-		out["dialogue"] = dialogue
+	if labels != { }:
+		out["labels"] = labels
 	return out
 
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
 	lines = []
-	lineNum = 0
 	string = False
 	for line in f.readlines():
+		if line.strip() == "":
+			continue
 		l = []
 		word = ""
 		for c in line:
+			if c == "\t":
+				continue
 			if not string:
 				if c == " " or c == "\n" or c == "\r":
 					l.append(word)

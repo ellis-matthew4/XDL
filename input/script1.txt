@@ -1,7 +1,36 @@
-scene school
-show harry neutral at left
-show kayla neutral at right
-harry "This is a test."
-kayla happy "So it is."
-harry sad "It's pretty boring though."
-kayla sad "So it is."
+label start:
+	scene school
+	show harry neutral at left
+	show kayla neutral at right
+	harry "This is a test."
+	kayla happy "So it is."
+	var k = 1
+	harry sad "It's pretty boring though."
+	kayla sad "So it is."
+	call next
+	return
+
+label next:
+	harry "This is another scene"
+	jump final
+	return
+	
+label final:
+	kayla "This is the final scene"
+	harry "Did you like this demo?"
+	menu:
+		option "Yes":
+			kayla "That's good."
+			harry "I didn't."
+			return
+		option "No":
+			harry "I told you."
+			kayla "I see..."
+			return
+		end
+	var num = 5
+	var bool = true
+	var float = 5.3221
+	var str = "meme"
+	harry "Test to see if variables are being skipped properly."
+	return
