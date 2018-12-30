@@ -29,5 +29,8 @@ label final:
 			return
 		end
 	var num = 5
+	var bool = true
+	var float = 5.3221
+	var str = "meme"
 	harry "Test to see if variables are being skipped properly."
 	return
