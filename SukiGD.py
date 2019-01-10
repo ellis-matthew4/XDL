@@ -21,6 +21,7 @@ TOKEN_VAR = "var"
 TOKEN_MENU = "menu:"
 TOKEN_OPTION = "option"
 TOKEN_END = "end"
+TOKEN_ACTION = "action"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -41,6 +42,7 @@ STMT_VAR = 15
 STMT_MENU = 16
 STMT_OPTION = 17
 STMT_END = 18
+STMT_ACTION = 19
 
 LEN_POSITIONS = 1
 LEN_POS = 4
@@ -218,6 +220,13 @@ def checkSyntax(TYPE, STMT):
 		if not isString(STMT[1][:-1]):
 			print(STMT)
 			raise Exception("Syntax Error: Token 1: Expected String.")
+	elif TYPE == STMT_ACTION:
+		if len(STMT) < 2:
+			print(STMT)
+			raise Exception(TOKENERROR)
+		if isString(STMT[1]):
+			print(STMT)
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	else:
 		print(STMT)
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -331,6 +340,11 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 					temp["value"] = eval(statement[3].capitalize())
 				else:
 					temp["value"] = eval(statement[3])
+			elif statement[0] == TOKEN_ACTION:
+				checkSyntax(STMT_ACTION, statement)
+				temp["action"] = statement[1]
+				if len(statement) > 2:
+					temp["args"] = statement[2:]
 			else:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
