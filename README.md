@@ -2,20 +2,16 @@
 A dialogue system that uses a simple scripting language based on RenPy, but compiles to a JSON format built for Godot
 
 NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
-
-# Things that currently work:
-
-  1. Transpiling from SukiGD to JSON
-
-  2. Compile-Time error messages
-  
-  3. Parsing from JSON into Godot
-  
-  4. The display system
   
 # Upcoming features:
   
   1. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
+  
+  2. Conditional statements using anonymous labels
+  
+  3. Window Show/Hide statements to control the visibility of the dialogue box
+  
+  4. Skip and Auto modes. Skipping unread text only is not currently planned.
   
 Things that might be worked on:
   
