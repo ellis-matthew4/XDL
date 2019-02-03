@@ -102,6 +102,10 @@ func statement(statement):
 				if k != "action":
 					option(k)
 			menu()
+		"window":
+			window(statement)
+		"play":
+			play(statement)
 		_:
 			print("Weird flex but ok")
 	
@@ -196,3 +200,12 @@ func menu_interact(o):
 	for c in $Menu.get_children():
 		c.queue_free()
 	menuDict = {}
+	
+func window(s):
+	if s["value"] == "hide":
+		$TextBox.visible = false
+	else:
+		$TextBox.visible = true
+		
+func play(s):
+	$AnimationPlayer.play(s["anim"])

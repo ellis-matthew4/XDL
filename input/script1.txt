@@ -9,7 +9,7 @@ label start:
 	kayla sad "So it is."
 	call next
 	return
-
+#poo poo pee pee
 label next:
 	harry "This is another scene"
 	jump final
@@ -28,11 +28,14 @@ label final:
 			kayla "I see..."
 			return
 		end
+	window hide
 	var num = 5
 	var bool = true
 	var float = 5.3221
 	var str = "meme"
 	action meme
 	action keyword "memes"
+	window show
+	play screenShake
 	harry "Test to see if variables are being skipped properly."
 	return
