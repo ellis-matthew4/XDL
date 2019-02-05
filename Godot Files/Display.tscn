@@ -1,27 +1,27 @@
 [gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Display.gd" type="Script" id=1]
-[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=2]
-[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=3]
-[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=4]
-[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=5]
-[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=6]
-[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=7]
-[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=8]
-[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=9]
-[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=10]
-[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=11]
-[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=12]
-[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=13]
-[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=14]
-[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=15]
-[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=16]
-[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=17]
-[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=18]
-[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=19]
-[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=20]
-[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=21]
-[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=22]
+[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=2]
+[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=3]
+[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=4]
+[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=5]
+[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=6]
+[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=7]
+[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=8]
+[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=9]
+[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=10]
+[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=11]
+[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=12]
+[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=13]
+[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=14]
+[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=15]
+[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=16]
+[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=17]
+[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=18]
+[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=19]
+[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=20]
+[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=21]
+[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=22]
 [ext_resource path="res://assets/classroom.png" type="Texture" id=23]
 [ext_resource path="res://assets/textbox.png" type="Texture" id=24]
 [ext_resource path="res://assets/namebox.png" type="Texture" id=25]
@@ -31,62 +31,62 @@
 animations = [ {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "shy",
+"name": "mad",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "neutral",
+"name": "happy",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
-"name": "shock",
+"name": "sad",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "bloody1",
+"name": "bloody3",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
-"name": "cry",
+"name": "smug",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
-"name": "laugh",
+"name": "bloody2",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 8 ) ],
 "loop": true,
-"name": "mad",
+"name": "shock",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 9 ) ],
 "loop": true,
-"name": "bloody2",
+"name": "bloody1",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 10 ) ],
 "loop": true,
-"name": "happy",
+"name": "cry",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 11 ) ],
 "loop": true,
-"name": "smug",
+"name": "laugh",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 12 ) ],
 "loop": true,
-"name": "sad",
+"name": "shy",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 13 ) ],
 "loop": true,
-"name": "bloody3",
+"name": "neutral",
 "speed": 5.0
 } ]
 
@@ -95,47 +95,47 @@ animations = [ {
 animations = [ {
 "frames": [ ExtResource( 14 ) ],
 "loop": true,
-"name": "neutral",
+"name": "mad",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 15 ) ],
 "loop": true,
-"name": "shock",
+"name": "happy",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 16 ) ],
 "loop": true,
-"name": "cry",
+"name": "sad",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 17 ) ],
 "loop": true,
-"name": "think",
+"name": "smug",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 18 ) ],
 "loop": true,
-"name": "laugh",
+"name": "shock",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 19 ) ],
 "loop": true,
-"name": "mad",
+"name": "think",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 20 ) ],
 "loop": true,
-"name": "happy",
+"name": "cry",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 21 ) ],
 "loop": true,
-"name": "smug",
+"name": "laugh",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 22 ) ],
 "loop": true,
-"name": "sad",
+"name": "neutral",
 "speed": 5.0
 } ]
 
@@ -276,5 +276,7 @@ playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
 blend_times = [  ]
+
+[connection signal="lineFinished" from="." to="." method="_on_root_lineFinished"]
 
 

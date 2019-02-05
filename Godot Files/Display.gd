@@ -14,10 +14,15 @@ var backdrops = {}
 var labels = {}
 var variables = {}
 var stack = []
-var wait = false
 var active = true
 
+var line
+var TEXT_SPEED = 10
+
 var path_to_folder = "res://output/"
+
+signal done
+signal lineFinished
 
 func _ready():
 	loadConstants("constants.json") #Only run this command when necessary!
@@ -33,12 +38,8 @@ func _process(delta):
 			get_node("TextBox").visible = true
 			if len(stack[0]) == 0:
 				stack.pop_front()
-			if wait:
-				var statement = stack[0].pop_front()
-				statement(statement)
-			elif Input.is_action_just_pressed("ui_select"):
-				var statement = stack[0].pop_front()
-				statement(statement)
+			if Input.is_action_just_pressed("ui_select"):
+				nextLine()
 		elif Input.is_action_just_pressed("ui_select"):
 			end()
 			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
@@ -78,45 +79,49 @@ func read(filename):
 		print("FAILED TO READ FILE " + filename)
 		return
 	labels = data.result["labels"]
-	
-func statement(statement):
-	match statement["action"]:
+
+func nextLine():
+	line = stack[0].pop_front()
+	statement()
+
+func statement():
+	match line["action"]:
 		"show":
-			Show(statement)
+			Show(line)
 		"hide":
-			Hide(statement)
+			Hide(line)
 		"dialogue":
-			dialogue(statement)
+			dialogue(line)
 		"scene":
-			Scene(statement)
+			Scene(line)
 		"call":
-			call(statement["label"])
+			call(line["label"])
 		"jump":
-			jump(statement["label"])
+			jump(line["label"])
 		"var":
-			variable(statement)
+			variable(line)
 		"menu":
 #			print("Menu detected")
-			menuDict = statement
-			for k in statement.keys():
+			menuDict = line
+			for k in line.keys():
 				if k != "action":
 					option(k)
 			menu()
 		"window":
-			window(statement)
+			window(line)
 		"play":
-			play(statement)
+			play(line)
 		_:
 			print("Weird flex but ok")
 	
 func call(label):
-	wait = true
 	push(label)
+	nextLine()
 #	print("Calling label " + label)
 	
 func jump(label):
-	wait = true
 	stack = [labels[label].duplicate()]
+	nextLine()
 #	print("Jumping to label " + label)
 	
 func push(label):
@@ -130,17 +135,17 @@ func pushList(l):
 	stack.push_front(l2)
 	
 func Show(s): # Show statement
-	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = positions[s["pos"]]
 	c.play(s["emote"])
 	c.visible = true
+	nextLine()
 	
 func Hide(s): # Hide statement
-	wait = true
 	var c = charNodes.get_node(characters[s["char"]]["path"])
 	c.global_position = Vector2(0,0)
 	c.visible = false
+	nextLine()
 func hideAll(): # Hides SukiGD
 	get_node("TextBox").visible = false
 	get_node("TextBox/TextControl/Dialogue").text = ""
@@ -152,30 +157,37 @@ func hideAll(): # Hides SukiGD
 		sc.visible = false
 		
 func dialogue(s): # Displays a line of dialogue
-	wait = false
 	if s.has("emote"):
 		var c = charNodes.get_node(characters[s["char"]]["path"])
 		c.play(s["emote"])
-	textBox.text = s["String"]
 	nameBox.text = s["char"].capitalize()
+	rollingDisplay(1)
+	
+func rollingDisplay(index):
+	if index <= len(line["String"]):
+		textBox.text = line["String"].substr(0,index)
+		yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
+		rollingDisplay(index + 1)
+	else:
+		emit_signal("lineFinished")
 	
 func Scene(s): # Changes the backdrop to the current scene
-	wait = true
 	for sc in $Scenes.get_children():
 		sc.visible = false
 	var sceneName = backdrops[s["scene"]]
 	get_node("Scenes/" + sceneName).visible = true
+	nextLine()
 		
 func end():
 	hideAll()
-	wait = true
+	emit_signal("done")
 	yield(get_tree().create_timer(0.5), "timeout")
 	# get_parent().remove_child(self) # uncomment if this is a singleton!
 	
 func variable(s):
 #	print("Assigning variable")
-	wait = true
 	variables[s["name"]] = s["value"]
+	nextLine()
 	
 func get(variable):
 	return variables[variable]
@@ -187,13 +199,13 @@ func option(o):
 	c.connect("interact", self, "menu_interact", [o])
 	
 func menu():
-	wait = true
 	$Menu.visible = true
 	$TextBox.visible = false
 	active = false
 	
 func menu_interact(o):
 	pushList(menuDict[o])
+	nextLine()
 	$Menu.visible = false
 	$TextBox.visible = true
 	active = true
@@ -206,6 +218,11 @@ func window(s):
 		$TextBox.visible = false
 	else:
 		$TextBox.visible = true
+	nextLine()
 		
 func play(s):
 	$AnimationPlayer.play(s["anim"])
+	nextLine()
+
+func _on_root_lineFinished():
+	pass
