@@ -14,6 +14,8 @@ var active = true
 var skip = false
 var auto = false
 
+var tempSave
+
 var line
 var TEXT_SPEED = 10
 var AUTO_SPEED = 2
@@ -52,6 +54,8 @@ func _process(delta):
 		skip = true
 	else:
 		skip = false
+	if Input.is_action_just_pressed("ui_focus_next"):
+		load_state(tempSave)
 	
 func read(filename):
 	var file = File.new()
@@ -63,6 +67,7 @@ func read(filename):
 		print("FAILED TO READ FILE " + filename)
 		return
 	labels = data.result["labels"]
+	currentScript = filename
 
 func nextLine():
 	line = stack[0].pop_front()
@@ -158,20 +163,22 @@ func adialogue(s):
 	rollingDisplay(1)
 	
 func centered(index):
-	if index <= len(line["String"]):
-		$Centered.text = line["String"].substr(0,index)
-		yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
-		centered(index + 1)
-	else:
-		emit_signal("lineFinished")
+	if line["action"] == "centered":
+		if index <= len(line["String"]):
+			$Centered.text = line["String"].substr(0,index)
+			yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
+			centered(index + 1)
+		else:
+			emit_signal("lineFinished")
 	
 func rollingDisplay(index):
-	if index <= len(line["String"]):
-		textBox.text = line["String"].substr(0,index)
-		yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
-		rollingDisplay(index + 1)
-	else:
-		emit_signal("lineFinished")
+	if line["action"] in ["dialogue", "adialogue"]:
+		if index <= len(line["String"]):
+			textBox.text = line["String"].substr(0,index)
+			yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
+			rollingDisplay(index + 1)
+		else:
+			emit_signal("lineFinished")
 	
 func Scene(s): # Changes the backdrop to the current scene
 	for sc in $Scenes.get_children():
