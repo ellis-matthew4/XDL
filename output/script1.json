@@ -46,6 +46,15 @@
 				"String": "\"So it is.\""
 			},
 			{
+				"action": "adialogue",
+				"String": "\"This is a test of an anonymous message.\""
+			},
+			{
+				"action": "centered",
+				"char": "centered",
+				"String": "\"This is a test of a centered message.\""
+			},
+			{
 				"action": "call",
 				"label": "next"
 			}

@@ -11,11 +11,15 @@ var labels = {}
 var variables = {}
 var stack = []
 var active = true
+var skip = false
+var auto = false
 
 var line
 var TEXT_SPEED = 10
+var AUTO_SPEED = 2
 
 var path_to_folder = "res://output/"
+var currentScript
 
 signal done
 signal lineFinished
@@ -35,10 +39,19 @@ func _process(delta):
 				stack.pop_front()
 			if Input.is_action_just_pressed("ui_select"):
 				nextLine()
+			elif skip:
+				if len(stack) > 0:
+					if stack.front().front()["action"] != "menu":
+						nextLine()
+				else:
+					end()
 		elif Input.is_action_just_pressed("ui_select"):
 			end()
 			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
-			get_tree().paused = false
+	if Input.is_key_pressed(KEY_CONTROL):
+		skip = true
+	else:
+		skip = false
 	
 func read(filename):
 	var file = File.new()
@@ -68,7 +81,7 @@ func statement():
 		"adialogue":
 			adialogue(line)
 		"centered":
-			centered(line)
+			centered(1)
 		"scene":
 			Scene(line)
 		"call":
@@ -89,7 +102,8 @@ func statement():
 		"play":
 			play(line)
 		_:
-			print("Weird flex but ok")
+			print(line)
+			nextLine()
 	
 func call(label):
 	push(label)
@@ -133,11 +147,13 @@ func dialogue(s): # Displays a line of dialogue
 	if s.has("emote"):
 		var c = charNodes.get_node(s["char"])
 		c.play(s["emote"])
+	$TextBox/Namebox.visible = true
 	nameBox.visible = true
 	nameBox.text = s["char"].capitalize()
 	rollingDisplay(1)
 
 func adialogue(s):
+	$TextBox/Namebox.visible = false
 	nameBox.visible = false
 	rollingDisplay(1)
 	
@@ -164,6 +180,7 @@ func Scene(s): # Changes the backdrop to the current scene
 	nextLine()
 		
 func end():
+	get_tree().paused = false
 	hideAll()
 	emit_signal("done")
 	yield(get_tree().create_timer(0.5), "timeout")
@@ -208,4 +225,6 @@ func play(s):
 	nextLine()
 
 func _on_root_lineFinished():
-	pass
+	if auto:
+		yield(get_tree().create_timer(AUTO_SPEED), "timeout")
+		nextLine()

@@ -1,16 +1,9 @@
 import os
 import json
 
-TOKEN_POSITIONS = "POSITIONS:"
-TOKEN_POS = "Position"
-TOKEN_CHARACTERS = "CHARACTERS:"
-TOKEN_CHAR = "Character"
-TOKEN_EMOTION = "Emotion"
 TOKEN_SHOW = "show"
 TOKEN_HIDE = "hide"
 TOKEN_EQ = "="
-TOKEN_BACKDROPS = "BACKDROPS:"
-TOKEN_BG = "Backdrop"
 TOKEN_SCENE = "scene"
 TOKEN_LABEL = "label"
 TOKEN_RETURN = "return"
@@ -26,16 +19,9 @@ TOKEN_WINDOW = "window"
 TOKEN_PLAY = "play"
 TOKEN_CENTERED = "centered"
 
-STMT_POSITIONS = 0
-STMT_POS = 1
-STMT_CHARACTERS = 2
-STMT_CHAR = 3
-STMT_EMOTION = 4
 STMT_SHOW = 5
 STMT_HIDE = 6
 STMT_DIALOG = 7
-STMT_BACKDROPS = 8
-STMT_BG = 9
 STMT_SCENE = 10
 STMT_LABEL = 11
 STMT_RETURN = 12
@@ -49,16 +35,9 @@ STMT_ACTION = 19
 STMT_WINDOW = 20
 STMT_PLAY = 21
 
-LEN_POSITIONS = 1
-LEN_POS = 4
-LEN_CHARACTERS = 1
-LEN_CHAR = 4
-LEN_EMOTION = 2
 LEN_SHOW = [4, 5]
 LEN_HIDE = 2
 LEN_DIALOG = [2, 3]
-LEN_BACKDROPS = 1
-LEN_BG = 4
 LEN_SCENE = 2
 LEN_LABEL = 2
 LEN_RETURN = 1
@@ -74,8 +53,6 @@ LEN_PLAY = 2
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
 STRINGERROR = "Syntax Error: Tried to set a name literal to a string."
-FINALSTRINGERROR = "Syntax Error: Final argument should be a String containing a path to a Node."
-FINALVECERROR = "Syntax Error: Final argument should be a 2D Vector. Example: (0.0,0.0)"
 
 def reStitch(STMT):
 	s = ""
@@ -84,58 +61,7 @@ def reStitch(STMT):
 	return s
 
 def checkSyntax(TYPE, STMT):
-	if TYPE == STMT_POSITIONS:
-		if len(STMT) != LEN_POSITIONS:
-			print(reStitch(STMT))
-			raise Exception(SYNTAXERROR)
-	elif TYPE == STMT_POS or TYPE == STMT_CHAR:
-		if len(STMT) != LEN_POS:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
-		else:
-			if STMT[2] != TOKEN_EQ:
-				print(reStitch(STMT))
-				raise Exception(SYNTAXERROR)
-			elif isString(STMT[1]):
-				print(reStitch(STMT))
-				raise Exception(STRINGERROR)
-			elif TYPE == STMT_CHAR and not isString(STMT[3]):
-				print(reStitch(STMT))
-				raise Exception(FINALSTRINGERROR)
-			elif TYPE == STMT_POS:
-				k = STMT[3]
-				if k[0] != "(" or k[-1] != ")":
-					raise Exception(FINALVECERROR)
-	elif TYPE == STMT_CHARACTERS:
-		if len(STMT) != LEN_CHARACTERS:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
-	elif TYPE == STMT_EMOTION:
-		if len(STMT) != LEN_EMOTION:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
-		elif isString(STMT[1]):
-			print(reStitch(STMT))
-			raise Exception(STRINGERROR)
-	elif TYPE == STMT_BACKDROPS:
-		if len(STMT) != LEN_BACKDROPS:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
-	elif TYPE == STMT_BG:
-		if len(STMT) != LEN_BG:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
-		else:
-			if STMT[2] != TOKEN_EQ:
-				print(reStitch(STMT))
-				raise Exception(SYNTAXERROR)
-			elif isString(STMT[1]):
-				print(reStitch(STMT))
-				raise Exception(STRINGERROR)
-			elif not isString(STMT[3]):
-				print(reStitch(STMT))
-				raise Exception(FINALSTRINGERROR)
-	elif TYPE == STMT_SHOW:
+	if TYPE == STMT_SHOW:
 		if not len(STMT) in LEN_SHOW:
 			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
@@ -300,37 +226,6 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 		elif statement[0] == TOKEN_OPTION:
 			checkSyntax(STMT_OPTION, statement)
 			currentOption = statement[1][:-1]
-		elif statement[0] == TOKEN_POSITIONS:
-			checkSyntax(STMT_POSITIONS, statement)
-			temp = { }
-		elif statement[0] == TOKEN_POS:
-			checkSyntax(STMT_POS, statement)
-			vec = statement[3].strip("()")
-			pivot = vec.index(",")
-			x = vec[:pivot]
-			y = vec[pivot+1:]
-			temp[statement[1]] = {"x": x, "y": y}
-		elif statement[0] == TOKEN_CHARACTERS:
-			checkSyntax(STMT_CHARACTERS, statement)
-			out["Positions"] = temp
-			temp = { }
-		elif statement[0] == TOKEN_CHAR:
-			checkSyntax(STMT_CHAR, statement)
-			if temp != { }:
-				chars[currentCharName] = temp
-				temp = { }
-				EM_INDEX = 0
-			currentCharName = statement[1]
-			temp["path"] = statement[3]
-		elif statement[0] == TOKEN_BACKDROPS:
-			checkSyntax(STMT_BACKDROPS, statement)
-			if temp != { }:
-				chars[currentCharName] = temp
-				out["Characters"] = chars
-			temp = { }
-		elif statement[0] == TOKEN_BG:
-			checkSyntax(STMT_BG, statement)
-			bg[statement[1]] = statement[3]
 		else:
 			if temp != { }:
 				temp = { }

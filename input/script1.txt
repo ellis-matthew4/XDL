@@ -7,6 +7,8 @@ label start:
 	var k = 1
 	harry sad "It's pretty boring though."
 	kayla sad "So it is."
+	"This is a test of an anonymous message."
+	centered "This is a test of a centered message."
 	call next
 	return
 #poo poo pee pee
