@@ -6,11 +6,7 @@ onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
 var choice = preload("res://Choice.tscn")
 
-var constants
 var menuDict
-var positions = {}
-var characters = {}
-var backdrops = {}
 var labels = {}
 var variables = {}
 var stack = []
@@ -25,7 +21,6 @@ signal done
 signal lineFinished
 
 func _ready():
-	loadConstants("constants.json") #Only run this command when necessary!
 	set_process(true)
 	read("script1.json")
 	jump("start")
@@ -45,30 +40,6 @@ func _process(delta):
 			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
 			get_tree().paused = false
 	
-func loadConstants(filename): # Load the constants to dictionaries for easy access
-	var file = File.new()
-	file.open(path_to_folder + filename, File.READ)
-	var data = file.get_as_text()
-	file.close()
-	data = JSON.parse(data)
-	if data.error != OK:
-		print("FAILED TO LOAD FILE " + filename)
-		return
-	constants = data.result
-	for p in constants["Positions"]: #Create actual game positions that can be used
-		var pos = Vector2()
-		pos.x = float(constants["Positions"][p]["x"])
-		pos.y = float(constants["Positions"][p]["y"])
-		positions[p] = pos * projectRes
-	var temp = constants["Characters"] #Create references to Character nodes
-	for c in temp:
-		characters[c] = temp[c]
-		characters[c]["path"] = characters[c]["path"].replace('"',"")
-	if constants.has("Backdrops"): #Create references to Scene nodes
-		backdrops = constants["Backdrops"]
-		for b in backdrops:
-			backdrops[b] = backdrops[b].replace('"',"")
-	
 func read(filename):
 	var file = File.new()
 	file.open(path_to_folder + filename, File.READ) #Default filepath, you probably want to change this
@@ -85,6 +56,8 @@ func nextLine():
 	statement()
 
 func statement():
+	if $Centered.text != "":
+		$Centered.text = ""
 	match line["action"]:
 		"show":
 			Show(line)
@@ -92,6 +65,10 @@ func statement():
 			Hide(line)
 		"dialogue":
 			dialogue(line)
+		"adialogue":
+			adialogue(line)
+		"centered":
+			centered(line)
 		"scene":
 			Scene(line)
 		"call":
@@ -117,39 +94,35 @@ func statement():
 func call(label):
 	push(label)
 	nextLine()
-#	print("Calling label " + label)
 	
 func jump(label):
 	stack = [labels[label].duplicate()]
 	nextLine()
-#	print("Jumping to label " + label)
 	
 func push(label):
-#	print("Adding label " + label + " to the stack.")
 	var label2 = labels[label].duplicate()
 	stack.push_front(label2)
 	
 func pushList(l):
-#	print("Adding anonymous label to the stack.")
 	var l2 = l.duplicate()
 	stack.push_front(l2)
 	
 func Show(s): # Show statement
-	var c = charNodes.get_node(characters[s["char"]]["path"])
-	c.global_position = positions[s["pos"]]
+	var c = charNodes.get_node(s["char"])
+	c.global_position = $Positions.get_node(s["pos"]).global_position
 	c.play(s["emote"])
 	c.visible = true
 	nextLine()
 	
 func Hide(s): # Hide statement
-	var c = charNodes.get_node(characters[s["char"]]["path"])
+	var c = charNodes.get_node(s["char"])
 	c.global_position = Vector2(0,0)
 	c.visible = false
 	nextLine()
 func hideAll(): # Hides SukiGD
 	get_node("TextBox").visible = false
-	get_node("TextBox/TextControl/Dialogue").text = ""
-	get_node("TextBox/TextControl/Name").text = ""
+	textBox.text = ""
+	nameBox.text = ""
 	for c in charNodes.get_children():
 		c.global_position = Vector2(0,0)
 		c.visible = false
@@ -158,10 +131,23 @@ func hideAll(): # Hides SukiGD
 		
 func dialogue(s): # Displays a line of dialogue
 	if s.has("emote"):
-		var c = charNodes.get_node(characters[s["char"]]["path"])
+		var c = charNodes.get_node(s["char"])
 		c.play(s["emote"])
+	nameBox.visible = true
 	nameBox.text = s["char"].capitalize()
 	rollingDisplay(1)
+
+func adialogue(s):
+	nameBox.visible = false
+	rollingDisplay(1)
+	
+func centered(index):
+	if index <= len(line["String"]):
+		$Centered.text = line["String"].substr(0,index)
+		yield(get_tree().create_timer(pow(10,-TEXT_SPEED)), "timeout")
+		centered(index + 1)
+	else:
+		emit_signal("lineFinished")
 	
 func rollingDisplay(index):
 	if index <= len(line["String"]):
@@ -174,18 +160,15 @@ func rollingDisplay(index):
 func Scene(s): # Changes the backdrop to the current scene
 	for sc in $Scenes.get_children():
 		sc.visible = false
-	var sceneName = backdrops[s["scene"]]
-	get_node("Scenes/" + sceneName).visible = true
+	get_node("Scenes/" + s["scene"]).visible = true
 	nextLine()
 		
 func end():
 	hideAll()
 	emit_signal("done")
 	yield(get_tree().create_timer(0.5), "timeout")
-	# get_parent().remove_child(self) # uncomment if this is a singleton!
 	
 func variable(s):
-#	print("Assigning variable")
 	variables[s["name"]] = s["value"]
 	nextLine()
 	

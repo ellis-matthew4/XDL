@@ -24,6 +24,7 @@ TOKEN_END = "end"
 TOKEN_ACTION = "action"
 TOKEN_WINDOW = "window"
 TOKEN_PLAY = "play"
+TOKEN_CENTERED = "centered"
 
 STMT_POSITIONS = 0
 STMT_POS = 1
@@ -379,17 +380,27 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				checkSyntax(STMT_PLAY, statement)
 				temp["action"] = statement[0]
 				temp["anim"] = statement[1]
-			else:
+			elif statement[0] == TOKEN_CENTERED:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
-					temp["action"] = "dialogue"
+					temp["action"] = "centered"
 					temp["char"] = statement[0]
 					temp["String"] = statement[1]
+			else:
+				if isString(statement[0]):
+					temp["action"] = "adialogue"
+					temp["String"] = statement[0]
 				else:
-					temp["action"] = "dialogue"
-					temp["char"] = statement[0]
-					temp["emote"] = statement[1]
-					temp["String"] = statement[2]
+					checkSyntax(STMT_DIALOG, statement)
+					if isString(statement[1]):
+						temp["action"] = "dialogue"
+						temp["char"] = statement[0]
+						temp["String"] = statement[1]
+					else:
+						temp["action"] = "dialogue"
+						temp["char"] = statement[0]
+						temp["emote"] = statement[1]
+						temp["String"] = statement[2]
 			dialogue.append(temp)
 	if bg != { }:
 		out["Backdrops"] = bg
