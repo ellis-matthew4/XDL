@@ -1,16 +1,9 @@
 import os
 import json
 
-TOKEN_POSITIONS = "POSITIONS:"
-TOKEN_POS = "Position"
-TOKEN_CHARACTERS = "CHARACTERS:"
-TOKEN_CHAR = "Character"
-TOKEN_EMOTION = "Emotion"
 TOKEN_SHOW = "show"
 TOKEN_HIDE = "hide"
 TOKEN_EQ = "="
-TOKEN_BACKDROPS = "BACKDROPS:"
-TOKEN_BG = "Backdrop"
 TOKEN_SCENE = "scene"
 TOKEN_LABEL = "label"
 TOKEN_RETURN = "return"
@@ -22,17 +15,13 @@ TOKEN_MENU = "menu:"
 TOKEN_OPTION = "option"
 TOKEN_END = "end"
 TOKEN_ACTION = "action"
+TOKEN_WINDOW = "window"
+TOKEN_PLAY = "play"
+TOKEN_CENTERED = "centered"
 
-STMT_POSITIONS = 0
-STMT_POS = 1
-STMT_CHARACTERS = 2
-STMT_CHAR = 3
-STMT_EMOTION = 4
 STMT_SHOW = 5
 STMT_HIDE = 6
 STMT_DIALOG = 7
-STMT_BACKDROPS = 8
-STMT_BG = 9
 STMT_SCENE = 10
 STMT_LABEL = 11
 STMT_RETURN = 12
@@ -43,17 +32,12 @@ STMT_MENU = 16
 STMT_OPTION = 17
 STMT_END = 18
 STMT_ACTION = 19
+STMT_WINDOW = 20
+STMT_PLAY = 21
 
-LEN_POSITIONS = 1
-LEN_POS = 4
-LEN_CHARACTERS = 1
-LEN_CHAR = 4
-LEN_EMOTION = 2
 LEN_SHOW = [4, 5]
 LEN_HIDE = 2
 LEN_DIALOG = [2, 3]
-LEN_BACKDROPS = 1
-LEN_BG = 4
 LEN_SCENE = 2
 LEN_LABEL = 2
 LEN_RETURN = 1
@@ -63,172 +47,141 @@ LEN_VAR = 4
 LEN_MENU = 1
 LEN_OPTION = 2
 LEN_END = 1
+LEN_WINDOW = 2
+LEN_PLAY = 2
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
 STRINGERROR = "Syntax Error: Tried to set a name literal to a string."
-FINALSTRINGERROR = "Syntax Error: Final argument should be a String containing a path to a Node."
-FINALVECERROR = "Syntax Error: Final argument should be a 2D Vector. Example: (0.0,0.0)"
+
+def reStitch(STMT):
+	s = ""
+	for k in STMT:
+		s += k + " "
+	return s
 
 def checkSyntax(TYPE, STMT):
-	if TYPE == STMT_POSITIONS:
-		if len(STMT) != LEN_POSITIONS:
-			print(STMT)
-			raise Exception(SYNTAXERROR)
-	elif TYPE == STMT_POS or TYPE == STMT_CHAR:
-		if len(STMT) != LEN_POS:
-			print(STMT)
-			raise Exception(TOKENERROR)
-		else:
-			if STMT[2] != TOKEN_EQ:
-				print(STMT)
-				raise Exception(SYNTAXERROR)
-			elif isString(STMT[1]):
-				print(STMT)
-				raise Exception(STRINGERROR)
-			elif TYPE == STMT_CHAR and not isString(STMT[3]):
-				print(STMT)
-				raise Exception(FINALSTRINGERROR)
-			elif TYPE == STMT_POS:
-				k = STMT[3]
-				if k[0] != "(" or k[-1] != ")":
-					raise Exception(FINALVECERROR)
-	elif TYPE == STMT_CHARACTERS:
-		if len(STMT) != LEN_CHARACTERS:
-			print(STMT)
-			raise Exception(TOKENERROR)
-	elif TYPE == STMT_EMOTION:
-		if len(STMT) != LEN_EMOTION:
-			print(STMT)
-			raise Exception(TOKENERROR)
-		elif isString(STMT[1]):
-			print(STMT)
-			raise Exception(STRINGERROR)
-	elif TYPE == STMT_BACKDROPS:
-		if len(STMT) != LEN_BACKDROPS:
-			print(STMT)
-			raise Exception(TOKENERROR)
-	elif TYPE == STMT_BG:
-		if len(STMT) != LEN_BG:
-			print(STMT)
-			raise Exception(TOKENERROR)
-		else:
-			if STMT[2] != TOKEN_EQ:
-				print(STMT)
-				raise Exception(SYNTAXERROR)
-			elif isString(STMT[1]):
-				print(STMT)
-				raise Exception(STRINGERROR)
-			elif not isString(STMT[3]):
-				print(STMT)
-				raise Exception(FINALSTRINGERROR)
-	elif TYPE == STMT_SHOW:
+	if TYPE == STMT_SHOW:
 		if not len(STMT) in LEN_SHOW:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]) or isString(STMT[2]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Strings are not accepted in Show statements.")
 		else:
 			if len(STMT) == 4:
 				if isString(STMT[3]):
-					print(STMT)
+					print(reStitch(STMT))
 					raise Exception("Syntax Error: Strings are not accepted in Show statements.")
 			else:
 				if isString(STMT[4]):
-					print(STMT)
+					print(reStitch(STMT))
 					raise Exception("Syntax Error: Strings are not accepted in Show statements.")
 				elif STMT[3] != "at":
-					print(STMT)
+					print(reStitch(STMT))
 					raise Exception("Syntax Error: Token 3: Expected 'at', got " + STMT[3])
 	elif TYPE == STMT_HIDE:
 		if len(STMT) != LEN_HIDE:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(STRINGERROR)
 	elif TYPE == STMT_DIALOG:
 		if not len(STMT) in LEN_DIALOG:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif len(STMT) == 2:
 			if not isString(STMT[1]):
-				print(STMT)
+				print(reStitch(STMT))
 				raise Exception("String expected, got " + STMT[1])
 		elif len(STMT) == 3:
 			if isString(STMT[1]):
-				print(STMT)
+				print(reStitch(STMT))
 				raise Exception(STRINGERROR)
 			elif not isString(STMT[2]):
-				print(STMT)
+				print(reStitch(STMT))
 				raise Exception("String expected, got " + STMT[2])
 	elif TYPE == STMT_SCENE:
 		if len(STMT) != LEN_SCENE:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	elif TYPE == STMT_LABEL:
 		if len(STMT) != LEN_LABEL:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	elif TYPE == STMT_RETURN:
 		if len(STMT) != LEN_RETURN:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 	elif TYPE == STMT_CALL:
 		if len(STMT) != LEN_CALL:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	elif TYPE == STMT_JUMP:
 		if len(STMT) != LEN_JUMP:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	elif TYPE == STMT_VAR:
 		if len(STMT) != LEN_VAR:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 		elif STMT[2] != TOKEN_EQ:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(SYNTAXERROR)
 	elif TYPE == STMT_MENU:
 		if len(STMT) != LEN_MENU:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 	elif TYPE == STMT_END:
 		if len(STMT) != LEN_END:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 	elif TYPE == STMT_OPTION:
 		if len(STMT) != LEN_OPTION:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		if not isString(STMT[1][:-1]):
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Expected String.")
 	elif TYPE == STMT_ACTION:
 		if len(STMT) < 2:
-			print(STMT)
+			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		if isString(STMT[1]):
-			print(STMT)
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_WINDOW:
+		if len(STMT) != LEN_WINDOW:
+			print(reStitch(STMT))
+			raise Exception(TOKENERROR)
+		if STMT[1] not in [TOKEN_SHOW, TOKEN_HIDE]:
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 2 can only be show or hide.")
+	elif TYPE == STMT_PLAY:
+		if len(STMT) != LEN_PLAY:
+			print(reStitch(STMT))
+			raise Exception(TOKENERROR)
+		if isString(STMT[1]):
+			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
 	else:
-		print(STMT)
+		print(reStitch(STMT))
 		raise Exception("I don't know what you did, but don't do it again.")
 		
 
@@ -273,37 +226,6 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 		elif statement[0] == TOKEN_OPTION:
 			checkSyntax(STMT_OPTION, statement)
 			currentOption = statement[1][:-1]
-		elif statement[0] == TOKEN_POSITIONS:
-			checkSyntax(STMT_POSITIONS, statement)
-			temp = { }
-		elif statement[0] == TOKEN_POS:
-			checkSyntax(STMT_POS, statement)
-			vec = statement[3].strip("()")
-			pivot = vec.index(",")
-			x = vec[:pivot]
-			y = vec[pivot+1:]
-			temp[statement[1]] = {"x": x, "y": y}
-		elif statement[0] == TOKEN_CHARACTERS:
-			checkSyntax(STMT_CHARACTERS, statement)
-			out["Positions"] = temp
-			temp = { }
-		elif statement[0] == TOKEN_CHAR:
-			checkSyntax(STMT_CHAR, statement)
-			if temp != { }:
-				chars[currentCharName] = temp
-				temp = { }
-				EM_INDEX = 0
-			currentCharName = statement[1]
-			temp["path"] = statement[3]
-		elif statement[0] == TOKEN_BACKDROPS:
-			checkSyntax(STMT_BACKDROPS, statement)
-			if temp != { }:
-				chars[currentCharName] = temp
-				out["Characters"] = chars
-			temp = { }
-		elif statement[0] == TOKEN_BG:
-			checkSyntax(STMT_BG, statement)
-			bg[statement[1]] = statement[3]
 		else:
 			if temp != { }:
 				temp = { }
@@ -345,17 +267,35 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 				temp["action"] = statement[1]
 				if len(statement) > 2:
 					temp["args"] = statement[2:]
-			else:
+			elif statement[0] == TOKEN_WINDOW:
+				checkSyntax(STMT_WINDOW, statement)
+				temp["action"] = statement[0]
+				temp["value"] = statement[1]
+			elif statement[0] == TOKEN_PLAY:
+				checkSyntax(STMT_PLAY, statement)
+				temp["action"] = statement[0]
+				temp["anim"] = statement[1]
+			elif statement[0] == TOKEN_CENTERED:
 				checkSyntax(STMT_DIALOG, statement)
 				if isString(statement[1]):
-					temp["action"] = "dialogue"
+					temp["action"] = "centered"
 					temp["char"] = statement[0]
 					temp["String"] = statement[1]
+			else:
+				if isString(statement[0]):
+					temp["action"] = "adialogue"
+					temp["String"] = statement[0]
 				else:
-					temp["action"] = "dialogue"
-					temp["char"] = statement[0]
-					temp["emote"] = statement[1]
-					temp["String"] = statement[2]
+					checkSyntax(STMT_DIALOG, statement)
+					if isString(statement[1]):
+						temp["action"] = "dialogue"
+						temp["char"] = statement[0]
+						temp["String"] = statement[1]
+					else:
+						temp["action"] = "dialogue"
+						temp["char"] = statement[0]
+						temp["emote"] = statement[1]
+						temp["String"] = statement[2]
 			dialogue.append(temp)
 	if bg != { }:
 		out["Backdrops"] = bg
@@ -368,7 +308,7 @@ def scan(filename): #Turns the input file into a list of lines, and each line in
 	lines = []
 	string = False
 	for line in f.readlines():
-		if line.strip() == "":
+		if line.strip() == "" or line[0] == "#":
 			continue
 		l = []
 		word = ""

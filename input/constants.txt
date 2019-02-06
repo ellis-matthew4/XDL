@@ -1,8 +1,0 @@
-POSITIONS:
-Position left = (0.3,0.6)
-Position right = (0.7,0.6)
-CHARACTERS:
-Character harry = "Harry"
-Character kayla = "Kayla"
-BACKDROPS:
-Backdrop school = "School"
