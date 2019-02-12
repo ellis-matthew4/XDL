@@ -5,17 +5,9 @@ NOTE: The JSON format can theoretically be used by any engine, but for now the o
   
 # Upcoming features:
   
-  1. Animation handlers and a "with" keyword for use with "Scene", "Show", and "Hide" statements
-  
-  2. Conditional statements using anonymous labels
-  
-  3. Window Show/Hide statements to control the visibility of the dialogue box
-  
-  4. Skip and Auto modes. Skipping unread text only is not currently planned.
-  
-Things that might be worked on:
-  
-  1. Creating an optional run-time transpiler in GDScript so SukiGD files can be used directly instead
+  1. An optional compiler flag to encrypt exported files
+  2. An optional interpreter variable to decrypt imported files
+  3. Switching the display to use RichTextLabels and BBCode support
   
 # HOW IT WORKS (Video soon(TM)):
 
