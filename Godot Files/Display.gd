@@ -4,7 +4,7 @@ onready var projectRes = Vector2(ProjectSettings.get_setting("display/window/siz
 onready var charNodes = get_node("Characters")
 onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
-var choice = preload("res://Choice.tscn")
+var choice = preload("res://Choice.tscn") # Change this!
 
 var menuDict
 var labels = {}
@@ -13,6 +13,8 @@ var stack = []
 var active = true
 var skip = false
 var auto = false
+var working = false
+var able = true
 
 var tempSave
 
@@ -20,16 +22,16 @@ var line
 var TEXT_SPEED = 10
 var AUTO_SPEED = 2
 
-var path_to_folder = "res://output/"
+var path_to_folder = "res://output/" # Change this!
 var currentScript
 
 signal done
 signal lineFinished
 
 func _ready():
-	set_process(true)
 	read("script1.json")
-	jump("start")
+	call("start")
+	set_process(true)
 	
 func _process(delta):
 	if active:
@@ -47,19 +49,17 @@ func _process(delta):
 						nextLine()
 				else:
 					end()
-		elif Input.is_action_just_pressed("ui_select"):
+		elif Input.is_action_just_pressed("ui_select") and working:
 			end()
 			# get_tree().call_group("playable_characters", "showGUI") #My games' command to show the HUD
 	if Input.is_key_pressed(KEY_CONTROL):
 		skip = true
 	else:
 		skip = false
-	if Input.is_action_just_pressed("ui_focus_next"):
-		load_state(tempSave)
 	
 func read(filename):
 	var file = File.new()
-	file.open(path_to_folder + filename, File.READ) #Default filepath, you probably want to change this
+	file.open(path_to_folder + filename, File.READ)
 	var data = file.get_as_text()
 	file.close()
 	data = JSON.parse(data)
@@ -70,6 +70,10 @@ func read(filename):
 	currentScript = filename
 
 func nextLine():
+	if len(stack[0]) == 0:
+		stack.pop_front()
+	if len(stack) == 0:
+		return
 	line = stack[0].pop_front()
 	statement()
 
@@ -111,12 +115,16 @@ func statement():
 			nextLine()
 	
 func call(label):
-	push(label)
-	nextLine()
+	if able:
+		working = true
+		push(label)
+		nextLine()
 	
 func jump(label):
-	stack = [labels[label].duplicate()]
-	nextLine()
+	if able:
+		working = true
+		stack = [labels[label].duplicate()]
+		nextLine()
 	
 func push(label):
 	var label2 = labels[label].duplicate()
@@ -187,10 +195,14 @@ func Scene(s): # Changes the backdrop to the current scene
 	nextLine()
 		
 func end():
+	line = {}
 	get_tree().paused = false
 	hideAll()
+	working = false
 	emit_signal("done")
+	able = false
 	yield(get_tree().create_timer(0.5), "timeout")
+	able = true
 	
 func variable(s):
 	variables[s["name"]] = s["value"]
@@ -212,13 +224,13 @@ func menu():
 	
 func menu_interact(o):
 	pushList(menuDict[o])
-	nextLine()
 	$Menu.visible = false
 	$TextBox.visible = true
 	active = true
 	for c in $Menu.get_children():
 		c.queue_free()
 	menuDict = {}
+	nextLine()
 	
 func window(s):
 	if s["value"] == "hide":
