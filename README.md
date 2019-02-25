@@ -2,6 +2,9 @@
 A dialogue system that uses a simple scripting language based on RenPy, but compiles to a JSON format built for Godot
 
 NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
+
+# IMPORTANT USAGE INFORMATION:
+SukiGD uses a 0.5 second Timer to prevent it from reactivating itself at the end of a dialogue. If you use a yield(SukiGD, "done") statement in Godot, you need to make sure that that statement is also on a cooldown timer! If you do not do this, SukiGD will crash.
   
 # Upcoming features:
   
