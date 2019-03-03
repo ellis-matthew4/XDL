@@ -8,9 +8,10 @@ SukiGD uses a 0.5 second Timer to prevent it from reactivating itself at the end
   
 # Upcoming features:
   
-  1. An optional compiler flag to encrypt exported files
-  2. An optional interpreter variable to decrypt imported files
-  3. Switching the display to use RichTextLabels and BBCode support
+  1. Switching the display to use RichTextLabels and BBCode support
+  2. YouTube tutorials and an in-depth User's Manual
+  3. Save States
+  4. History/logging of dialogue statements
   
 # HOW IT WORKS (Video soon(TM)):
 
@@ -38,3 +39,5 @@ get(variable) # returns a local variable from the currently loaded script file
 # State of the Software:
 
 Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system works as intended. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
+
+Several planned features, such as novel mode and encryption have been scrapped to keep the software as simple as possible. If your game uses novel mode, like Tsukihime or Fate/Stay Night, you'll want to rebuild the interpreter yourself to make sure it works the way you want it to.
