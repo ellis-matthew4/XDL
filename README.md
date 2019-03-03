@@ -40,4 +40,4 @@ get(variable) # returns a local variable from the currently loaded script file
 
 Scripts can be transpiled from SukiGD to JSON and read into Godot. The display system works as intended. The transpiler really doesn't like Windows's end line character, so I highly recommend using a tool such as dos2unix on your scripts before running them through. Cygwin can run python and dos2unix, so I reccomend using that if you're not scared of the command line.
 
-Several planned features, such as novel mode and encryption have been scrapped to keep the software as simple as possible. If your game uses novel mode, like Tsukihime or Fate/Stay Night, you'll want to rebuild the interpreter yourself to make sure it works the way you want it to.
+Several planned features, such as novel mode and encryption have been scrapped to keep the software as simple as possible. If your game uses novel mode, like Tsukihime or Fate/Stay Night, you'll want to rebuild the interpreter yourself to make sure it works the way you want it to. If I get enough requests, I will create a modified interpreter in another branch that handles novel mode.
