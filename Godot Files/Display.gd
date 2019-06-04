@@ -16,7 +16,7 @@ var auto = false
 var working = false
 var able = true
 
-var tempSave
+var tempSave = null
 
 var line
 var TEXT_SPEED = 10
@@ -24,9 +24,44 @@ var AUTO_SPEED = 2
 
 var path_to_folder = "res://output/" # Change this!
 var currentScript
+var currentScene
 
 signal done
 signal lineFinished
+
+func serialize():
+	var save = {}
+	save["chars"] = getCharacterStates()
+	save["vars"] = variables
+	save["line"] = line
+	save["stack"] = stack
+	save["script"] = currentScript
+	save["scene"] = currentScene
+	return var2str(save)
+	
+func deserialize(save):
+	save = str2var(save)
+	read(save["script"])
+	Scene(save)
+	variables = save["vars"]
+	line = save["line"]
+	stack = save["stack"]
+	for c in save["chars"]:
+		var t = save["chars"][c]
+		get_node(c).visible = t["visible"]
+		get_node(c).global_position = t["position"]
+		get_node(c).play(t["emote"])
+	statement()
+	
+func getCharacterStates():
+	var d = {}
+	for c in $Characters.get_children():
+		var temp = {}
+		temp["visible"] = c.visible
+		temp["position"] = c.global_position
+		temp["emote"] = c.animation
+		d[get_path_to(c)] = temp
+	return d
 
 func _ready():
 	read("script1.json")
@@ -34,6 +69,11 @@ func _ready():
 	set_process(true)
 	
 func _process(delta):
+	if Input.is_action_just_pressed("ui_page_up"):
+		tempSave = serialize()
+	if Input.is_action_just_pressed("ui_page_down"):
+		if tempSave != null:
+			deserialize(tempSave)
 	if active:
 		if len(stack) > 0: #Triggers upon calling or jumping
 			# get_tree().call_group("playable_characters", "hideGUI") #My games' command to hide the HUD
@@ -192,6 +232,7 @@ func Scene(s): # Changes the backdrop to the current scene
 	for sc in $Scenes.get_children():
 		sc.visible = false
 	get_node("Scenes/" + s["scene"]).visible = true
+	currentScene = s["scene"]
 	nextLine()
 		
 func end():
