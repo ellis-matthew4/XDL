@@ -5,6 +5,7 @@ label start:
 	harry "This is a test."
 	kayla happy "So it is."
 	var k = 1
+	if k + 1 == 1 call next
 	harry sad "It's pretty boring though."
 	kayla sad "So it is."
 	"This is a test of an anonymous message."

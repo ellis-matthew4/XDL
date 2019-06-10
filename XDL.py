@@ -18,6 +18,7 @@ TOKEN_ACTION = "action"
 TOKEN_WINDOW = "window"
 TOKEN_PLAY = "play"
 TOKEN_CENTERED = "centered"
+TOKEN_IF = "if"
 
 STMT_SHOW = 5
 STMT_HIDE = 6
@@ -34,6 +35,7 @@ STMT_END = 18
 STMT_ACTION = 19
 STMT_WINDOW = 20
 STMT_PLAY = 21
+STMT_IF = 22
 
 LEN_SHOW = [4, 5]
 LEN_HIDE = 2
@@ -49,6 +51,15 @@ LEN_OPTION = 2
 LEN_END = 1
 LEN_WINDOW = 2
 LEN_PLAY = 2
+LEN_IF = 6
+
+OPERATORS = ['==','<=','>=','!=','>','<']
+
+operator = -10
+operand = -20
+leftparentheses = -30
+rightparentheses = -40
+empty = -50
 
 SYNTAXERROR = "Syntax error on the above line."
 TOKENERROR = "Syntax Error: The number of tokens on the above line is illegal."
@@ -57,7 +68,7 @@ STRINGERROR = "Syntax Error: Tried to set a name literal to a string."
 def reStitch(STMT):
 	s = ""
 	for k in STMT:
-		s += k + " "
+		s += str(k) + " "
 	return s
 
 def checkSyntax(TYPE, STMT):
@@ -180,6 +191,16 @@ def checkSyntax(TYPE, STMT):
 		if isString(STMT[1]):
 			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Unexpected String.")
+	elif TYPE == STMT_IF:
+		if len(STMT) != LEN_IF:
+			print(reStitch(STMT))
+			raise Exception(TOKENERROR)
+		if STMT[4] not in [TOKEN_CALL,TOKEN_JUMP]:
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 4: Unknown protocol " + STMT[4] + ".")
+		if isString(STMT[5]):
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 5: Unexpected String.")
 	else:
 		print(reStitch(STMT))
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -281,6 +302,15 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 					temp["action"] = "centered"
 					temp["char"] = statement[0]
 					temp["String"] = statement[1]
+			elif statement[0] == TOKEN_IF:
+				statement = createCondition(statement)
+				checkSyntax(STMT_IF, statement)
+				temp["action"] = statement[0]
+				temp["op1"] = statement[1]
+				temp["opr"] = statement[2]
+				temp["op2"] = statement[3]
+				temp["protocol"] = statement[4]
+				temp["target"] = statement[5]
 			else:
 				if isString(statement[0]):
 					temp["action"] = "adialogue"
@@ -302,6 +332,76 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	if labels != { }:
 		out["labels"] = labels
 	return out
+
+def createCondition(s):
+	new = []
+	token = []
+	for t in s:
+		if t in OPERATORS:
+			pivot = s.index(t)
+		if t == TOKEN_CALL or t == TOKEN_JUMP:
+			endpoint = s.index(t)
+			break
+	new.append(s[0])
+	for t in s[1:pivot]:
+		token.append(t)
+	new.append(convert(token))
+	new.append(s[pivot])
+	token = []
+	for t in s[pivot+1:endpoint]:
+		token.append(t)
+	new.append(convert(token))
+	new.append(s[endpoint])
+	new.append(s[endpoint+1])
+	return new
+	
+def precedence(s): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-postfix-conversion-in-python/
+    if s is '(':
+        return 0
+    elif s is '+' or s is '-':
+        return 1
+    elif s is '*' or s is '/' or s is '%':
+        return 2
+    else:
+        return 99
+                 
+def typeof(s): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-postfix-conversion-in-python/
+    if s is '(':
+        return leftparentheses
+    elif s is ')':
+        return rightparentheses
+    elif s is '+' or s is '-' or s is '*' or s is '%' or s is '/':
+        return operator
+    elif s is ' ':
+        return empty    
+    else :
+        return operand                          
+ 
+def convert(infix): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-postfix-conversion-in-python/
+	postfix = []
+	temp = []
+	for i in infix :
+		type = typeof(i)
+		if type is leftparentheses :
+			temp.append(i)
+		elif type is rightparentheses :
+			next = temp.pop()
+			while next is not '(':
+				postfix.append(next)
+				next = temp.pop()
+		elif type is operand:
+			postfix.append(i)
+		elif type is operator:
+			p = precedence(i)
+			while len(temp) is not 0 and p <= precedence(temp[-1]) :
+				postfix.append(temp.pop())
+			temp.append(i)
+		elif type is empty:
+			continue
+					 
+	while len(temp) > 0 :
+		postfix.append(temp.pop())
+	return postfix
 
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
