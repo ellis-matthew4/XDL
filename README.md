@@ -45,7 +45,7 @@ Label-orientation refers to how the data is structured into named lists called l
 
 The shortest reason is because XDL is meant to be compatible with any game engine. Allowing the user to code in GDScript would make a Unity interpreter fail. A longer answer would be because the goal is to decouple the dialogue from the game, and have the two send each other instructions rather than have XDL handle computations. The exception to this is flow control, as if statements will be able to perform very basic arithmetic.
 
-> Will <FEATURE> be implemented?
+> Will (Some feature) be implemented?
   
 The short and possibly incorrect answer is no. The interpreter is designed to be extensible, so if you want a feature for your game, use the action keyword and implement it. You aren't meant to use the interpreter the exact way it comes out of the box, I fully expect you to edit it for your game.
 
