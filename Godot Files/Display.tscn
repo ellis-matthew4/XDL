@@ -22,6 +22,7 @@
 [ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=20]
 [ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=21]
 [ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=22]
+
 [ext_resource path="res://assets/classroom.png" type="Texture" id=23]
 [ext_resource path="res://assets/textbox.png" type="Texture" id=24]
 [ext_resource path="res://assets/namebox.png" type="Texture" id=25]
@@ -98,12 +99,12 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 15 ) ],
 "loop": true,
-"name": "happy",
+"name": "smug",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 16 ) ],
 "loop": true,
-"name": "neutral",
+"name": "laugh",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 17 ) ],

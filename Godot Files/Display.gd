@@ -6,7 +6,6 @@ onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
 var choice = preload("res://Choice.tscn") # Change this!
 
-var menuDict
 var labels = {}
 var variables = {}
 var stack = []
@@ -142,11 +141,6 @@ func statement():
 		"var":
 			variable(line)
 		"menu":
-#			print("Menu detected")
-			menuDict = line
-			for k in line.keys():
-				if k != "action":
-					option(k)
 			menu()
 		"window":
 			window(line)
@@ -259,22 +253,26 @@ func get(variable):
 func option(o):
 	var c = choice.instance()
 	$Menu.add_child(c)
-	c.text = o
+	c.text = o["string"]
 	c.connect("interact", self, "menu_interact", [o])
 	
 func menu():
 	$Menu.visible = true
 	$TextBox.visible = false
 	active = false
+	for o in line["options"]:
+		option(o)
 	
 func menu_interact(o):
-	pushList(menuDict[o])
+	if o["protocol"] == "call":
+		call(o["target"])
+	else:
+		jump(o["target"])
 	$Menu.visible = false
 	$TextBox.visible = true
 	active = true
 	for c in $Menu.get_children():
 		c.queue_free()
-	menuDict = {}
 	nextLine()
 	
 func window(s):
