@@ -59,6 +59,30 @@
 				"label": "next"
 			}
 		],
+		"finalc1": [
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"That's good.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"I didn't.\""
+			}
+		],
+		"finalc2": [
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"I told you.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"I see...\""
+			}
+		],
 		"final": [
 			{
 				"action": "dialogue",
@@ -72,34 +96,20 @@
 			},
 			{
 				"action": "menu",
-				"\"No\"": [
+				"options": [
 					{
-						"action": "dialogue",
-						"char": "harry",
-						"String": "\"I told you.\""
+						"action": "option",
+						"protocol": "call",
+						"string": "\"Yes\"",
+						"target": "finalc1"
 					},
 					{
-						"action": "dialogue",
-						"char": "kayla",
-						"String": "\"I see...\""
-					}
-				],
-				"\"Yes\"": [
-					{
-						"action": "dialogue",
-						"char": "kayla",
-						"String": "\"That's good.\""
-					},
-					{
-						"action": "dialogue",
-						"char": "harry",
-						"String": "\"I didn't.\""
+						"action": "option",
+						"protocol": "jump",
+						"string": "\"No\"",
+						"target": "finalc2"
 					}
 				]
-			},
-			{
-				"action": "window",
-				"value": "hide"
 			},
 			{
 				"action": "var",

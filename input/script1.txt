@@ -21,15 +21,8 @@ label final:
 	kayla "This is the final scene"
 	harry "Did you like this demo?"
 	menu:
-		option "Yes":
-			kayla "That's good."
-			harry "I didn't."
-			return
-		option "No":
-			harry "I told you."
-			kayla "I see..."
-			return
-		end
+		option "Yes" call finalc1
+		option "No" jump finalc2
 	window hide
 	var num = 5
 	var bool = true
@@ -40,4 +33,14 @@ label final:
 	window show
 	play screenShake
 	harry "Test to see if variables are being skipped properly."
+	return
+	
+label finalc1:
+	kayla "That's good."
+	harry "I didn't."
+	return
+	
+label finalc2:
+	harry "I told you."
+	kayla "I see..."
 	return

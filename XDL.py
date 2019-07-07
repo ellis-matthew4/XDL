@@ -13,7 +13,6 @@ TOKEN_JUMP = "jump"
 TOKEN_VAR = "var"
 TOKEN_MENU = "menu:"
 TOKEN_OPTION = "option"
-TOKEN_END = "end"
 TOKEN_ACTION = "action"
 TOKEN_WINDOW = "window"
 TOKEN_PLAY = "play"
@@ -45,8 +44,7 @@ LEN_CALL = 2
 LEN_JUMP = 2
 LEN_VAR = 4
 LEN_MENU = 1
-LEN_OPTION = 2
-LEN_END = 1
+LEN_OPTION = 4
 LEN_WINDOW = 2
 LEN_PLAY = 2
 
@@ -148,17 +146,19 @@ def checkSyntax(TYPE, STMT):
 		if len(STMT) != LEN_MENU:
 			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
-	elif TYPE == STMT_END:
-		if len(STMT) != LEN_END:
-			print(reStitch(STMT))
-			raise Exception(TOKENERROR)
 	elif TYPE == STMT_OPTION:
 		if len(STMT) != LEN_OPTION:
 			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
-		if not isString(STMT[1][:-1]):
+		if not isString(STMT[1]):
 			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 1: Expected String.")
+		if STMT[2] not in [ TOKEN_CALL, TOKEN_JUMP ]:
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 2: Invalid protocol.")
+		if isString(STMT[3]):
+			print(reStitch(STMT))
+			raise Exception("Syntax Error: Token 3: Unexpected String.")
 	elif TYPE == STMT_ACTION:
 		if len(STMT) < 2:
 			print(reStitch(STMT))
@@ -198,34 +198,33 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 	menu = { "action":"menu" }
 	currentCharName = ""
 	currentLabel = ""
-	currentOption = ""
 	dialogue = []
-	storage = []
 	for statement in statements:
 		if statement[0] == TOKEN_LABEL:
 			checkSyntax(STMT_LABEL, statement)
 			currentLabel = statement[1][:-1]
-		elif statement[0] == TOKEN_RETURN:
-			checkSyntax(STMT_RETURN, statement)
-			if currentOption == "":
-				labels[currentLabel] = dialogue
-				dialogue = []
+		elif statement[0] == TOKEN_OPTION:
+			if menu != { "action" : "menu" }:
+				temp = { }
+				checkSyntax(STMT_OPTION, statement)
+				currentOption = statement[1][:-1]
+				temp["action"] = statement[0]
+				temp["string"] = statement[1]
+				temp["protocol"] = statement[2]
+				temp["target"] = statement[3]
+				menu["options"].append(temp)
+				temp = { }
 			else:
-				menu[currentOption] = dialogue
-				dialogue = []
-		elif statement[0] == TOKEN_END:
-			checkSyntax(STMT_END, statement)
-			currentOption = ""
-			dialogue = storage
+				raise Exception("Bad menu block")
+		elif menu != { "action":"menu" }: # Exit condition for menu options
 			dialogue.append(menu)
-			storage = []
 			menu = { "action":"menu" }
 		elif statement[0] == TOKEN_MENU:
-			storage = dialogue
+			menu["options"] = []
+		elif statement[0] == TOKEN_RETURN:
+			checkSyntax(STMT_RETURN, statement)
+			labels[currentLabel] = dialogue
 			dialogue = []
-		elif statement[0] == TOKEN_OPTION:
-			checkSyntax(STMT_OPTION, statement)
-			currentOption = statement[1][:-1]
 		else:
 			if temp != { }:
 				temp = { }
