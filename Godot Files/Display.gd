@@ -1,6 +1,5 @@
 extends CanvasLayer
 
-onready var projectRes = Vector2(ProjectSettings.get_setting("display/window/size/width"), ProjectSettings.get_setting("display/window/size/height"))
 onready var charNodes = get_node("Characters")
 onready var textBox = get_node("TextBox/TextControl/Dialogue")
 onready var nameBox = get_node("TextBox/TextControl/Name")
@@ -288,43 +287,58 @@ func play(s):
 	
 func condition(s):
 	var result
+	var op1 = expression(s["op1"])
+	var op2 = expression(s["op2"])
 	match(s["opr"]):
-		"==": result = expression(s["op1"]) == expression(s["op2"])
-		"!=": result = expression(s["op1"]) <= expression(s["op2"])
-		">=": result = expression(s["op1"]) >= expression(s["op2"])
-		"!=": result = expression(s["op1"]) != expression(s["op2"])
-		">": result = expression(s["op1"]) > expression(s["op2"])
-		"<": result = expression(s["op1"]) < expression(s["op2"])
+		"==": result = op1 == op2
+		"!=": result = op1 <= op2
+		">=": result = op1 >= op2
+		"!=": result = op1 != op2
+		">": result = op1 > op2
+		"<": result = op1 < op2
 		_: print("ERROR! BAD OPERAND")
 	if result:
 		match(s["protocol"]):
 			"call": call(s["target"])
 			"jump": jump(s["target"])
 			_: print("INVALID PROTOCOL")
-
+	nextLine()
+		
 func _on_root_lineFinished():
 	if auto:
 		yield(get_tree().create_timer(AUTO_SPEED), "timeout")
 		nextLine()
 
 func expression(pf):
-	stack = []
+	for i in range(len(pf)):
+		if variables.has(pf[i]):
+			pf[i] = variables[pf[i]]
+	var local_stack = []
 	while len(pf) > 0:
 		var c = pf.pop_front()
-		if typeof(c) == operator:
-			var a = stack.pop(0)
-			if variables.has(a):
-				a = variables[a]
-			var b = stack.pop(0)
-			if variables.has(b):
-				b = variables[b]
+		if TypeOf(c) == operator:
+			var a = float(local_stack.pop_front())
+			var b = float(local_stack.pop_front())
 			var r
 			match(c):
 				"+": r = a + b
 				"-": r = a - b
 				"*": r = a * b
 				"/": r = a / b
-			stack.push_front(r)
+			local_stack.push_front(r)
 		else:
-			stack.insert(0,c)
-	return stack[0]
+			local_stack.insert(0,c)
+	return str(local_stack[0])
+
+func TypeOf(s):
+	s = str(s)
+	if s == '(':
+		return leftparentheses
+	elif s == ')':
+		return rightparentheses
+	elif s == '+' or s == '-' or s == '*' or s == '%' or s == '/':
+		return operator
+	elif s == ' ':
+		return empty    
+	else :
+		return operand  

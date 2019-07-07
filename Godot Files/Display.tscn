@@ -1,31 +1,28 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Display.gd" type="Script" id=1]
 [ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=2]
 [ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=3]
-[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=4]
-[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=5]
-[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=6]
-[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=7]
-[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=8]
+[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=4]
+[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=5]
+[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=6]
+[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=7]
+[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=8]
 [ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=9]
-[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=10]
-[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=11]
-[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=12]
+[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=10]
+[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=11]
+[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=12]
 [ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=13]
 [ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=14]
-[ext_resource path="res://assets/kayla/kayla_happy.png" type="Texture" id=15]
-[ext_resource path="res://assets/kayla/kayla_neutral.png" type="Texture" id=16]
+[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=15]
+[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=16]
 [ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=17]
-[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=18]
-[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=19]
-[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=20]
-[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=21]
-[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=22]
-
-[ext_resource path="res://assets/classroom.png" type="Texture" id=23]
-[ext_resource path="res://assets/textbox.png" type="Texture" id=24]
-[ext_resource path="res://assets/namebox.png" type="Texture" id=25]
+[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=18]
+[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=19]
+[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=20]
+[ext_resource path="res://assets/classroom.png" type="Texture" id=21]
+[ext_resource path="res://assets/textbox.png" type="Texture" id=22]
+[ext_resource path="res://assets/namebox.png" type="Texture" id=23]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -41,27 +38,27 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
-"name": "neutral",
+"name": "bloody1",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "cry",
+"name": "shock",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
-"name": "bloody3",
+"name": "laugh",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
-"name": "bloody1",
+"name": "cry",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 8 ) ],
 "loop": true,
-"name": "shy",
+"name": "neutral",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 9 ) ],
@@ -71,17 +68,17 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 10 ) ],
 "loop": true,
-"name": "smug",
+"name": "bloody3",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 11 ) ],
 "loop": true,
-"name": "shock",
+"name": "shy",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 12 ) ],
 "loop": true,
-"name": "laugh",
+"name": "smug",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 13 ) ],
@@ -99,7 +96,7 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 15 ) ],
 "loop": true,
-"name": "smug",
+"name": "shock",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 16 ) ],
@@ -114,27 +111,17 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 18 ) ],
 "loop": true,
-"name": "sad",
+"name": "think",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 19 ) ],
 "loop": true,
-"name": "smug",
+"name": "sad",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 20 ) ],
 "loop": true,
-"name": "shock",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 21 ) ],
-"loop": true,
-"name": "laugh",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 22 ) ],
-"loop": true,
-"name": "think",
+"name": "smug",
 "speed": 5.0
 } ]
 
@@ -159,16 +146,16 @@ z_index = -1
 
 [node name="school" type="Sprite" parent="Scenes"]
 visible = false
-texture = ExtResource( 23 )
+texture = ExtResource( 21 )
 centered = false
 
 [node name="TextBox" type="Sprite" parent="."]
 position = Vector2( 640, 598 )
-texture = ExtResource( 24 )
+texture = ExtResource( 22 )
 
 [node name="Namebox" type="Sprite" parent="TextBox"]
 position = Vector2( -296.562, -84.3432 )
-texture = ExtResource( 25 )
+texture = ExtResource( 23 )
 
 [node name="TextControl" type="Control" parent="TextBox"]
 margin_right = 40.0
