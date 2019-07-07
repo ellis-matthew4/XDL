@@ -28,6 +28,8 @@ var currentScene
 signal done
 signal lineFinished
 
+enum {operator, operand, leftparentheses, rightparentheses, empty}
+
 func serialize():
 	var save = {}
 	save["chars"] = getCharacterStates()
@@ -144,6 +146,8 @@ func statement():
 			window(line)
 		"play":
 			play(line)
+		"if":
+			condition(line)
 		_:
 			print(line)
 			nextLine()
@@ -281,8 +285,46 @@ func window(s):
 func play(s):
 	$AnimationPlayer.play(s["anim"])
 	nextLine()
+	
+func condition(s):
+	var result
+	match(s["opr"]):
+		"==": result = expression(s["op1"]) == expression(s["op2"])
+		"!=": result = expression(s["op1"]) <= expression(s["op2"])
+		">=": result = expression(s["op1"]) >= expression(s["op2"])
+		"!=": result = expression(s["op1"]) != expression(s["op2"])
+		">": result = expression(s["op1"]) > expression(s["op2"])
+		"<": result = expression(s["op1"]) < expression(s["op2"])
+		_: print("ERROR! BAD OPERAND")
+	if result:
+		match(s["protocol"]):
+			"call": call(s["target"])
+			"jump": jump(s["target"])
+			_: print("INVALID PROTOCOL")
 
 func _on_root_lineFinished():
 	if auto:
 		yield(get_tree().create_timer(AUTO_SPEED), "timeout")
 		nextLine()
+
+func expression(pf):
+	stack = []
+	while len(pf) > 0:
+		var c = pf.pop_front()
+		if typeof(c) == operator:
+			var a = stack.pop(0)
+			if variables.has(a):
+				a = variables[a]
+			var b = stack.pop(0)
+			if variables.has(b):
+				b = variables[b]
+			var r
+			match(c):
+				"+": r = a + b
+				"-": r = a - b
+				"*": r = a * b
+				"/": r = a / b
+			stack.push_front(r)
+		else:
+			stack.insert(0,c)
+	return stack[0]
