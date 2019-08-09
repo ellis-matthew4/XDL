@@ -3,6 +3,13 @@ A label-oriented dialogue system that uses a simple scripting language based on 
 
 NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
 
+# Planned features for next update
+1) Complete transition to label-orientation. This will remove the concept of anonymous labels in favor of a strict label table in order to optimize serialization performance.
+    1) New syntax for option statements to reflect the new paradigm
+2) Expression evaluation for conditional branching
+3) New Include keyword for overwriting specific labels in the label table
+4) Optional variant string notation: $"{var}", will parse the display string into a list of strings, which will be evaluated and strung together at interpretation time.
+
 # IMPORTANT USAGE INFORMATION:
 XDL uses a 0.5 second Timer to prevent it from reactivating itself at the end of a dialogue. If you use a yield(XDL, "done") statement in Godot, you need to make sure that that statement is also on a cooldown timer! If you do not do this, XDL will crash.
 
