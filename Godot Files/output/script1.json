@@ -1,1 +1,183 @@
-{"labels": {"start": [{"action": "scene", "scene": "school"}, {"action": "show", "char": "harry", "emote": "neutral", "pos": "left"}, {"action": "show", "char": "kayla", "emote": "neutral", "pos": "right"}, {"action": "dialogue", "char": "harry", "String": "\"This is a test.\""}, {"action": "dialogue", "char": "kayla", "emote": "happy", "String": "\"So it is.\""}, {"action": "var", "name": "k", "value": 1}, {"protocol": "call", "op1": ["k", "1", "+"], "op2": ["2"], "opr": "==", "action": "if", "target": "next"}, {"action": "dialogue", "char": "harry", "emote": "sad", "String": "\"It's pretty boring though.\""}, {"action": "dialogue", "char": "kayla", "emote": "sad", "String": "\"So it is.\""}, {"action": "adialogue", "String": "\"This is a test of an anonymous message.\""}, {"action": "centered", "char": "centered", "String": "\"This is a test of a centered message.\""}, {"action": "call", "label": "next"}], "finalc1": [{"action": "dialogue", "char": "kayla", "String": "\"That's good.\""}, {"action": "dialogue", "char": "harry", "String": "\"I didn't.\""}], "finalc2": [{"action": "dialogue", "char": "harry", "String": "\"I told you.\""}, {"action": "dialogue", "char": "kayla", "String": "\"I see...\""}], "final": [{"action": "dialogue", "char": "kayla", "String": "\"This is the final scene\""}, {"action": "dialogue", "char": "harry", "String": "\"Did you like this demo?\""}, {"action": "menu", "options": [{"action": "option", "protocol": "call", "string": "\"Yes\"", "target": "finalc1"}, {"action": "option", "protocol": "jump", "string": "\"No\"", "target": "finalc2"}]}, {"action": "var", "name": "num", "value": 5}, {"action": "var", "name": "bool", "value": true}, {"action": "var", "name": "float", "value": 5.3221}, {"action": "var", "name": "str", "value": "meme"}, {"action": "meme"}, {"action": "keyword", "args": ["\"memes\""]}, {"action": "window", "value": "show"}, {"action": "play", "anim": "screenShake"}, {"action": "dialogue", "char": "harry", "String": "\"Test to see if variables are being skipped properly.\""}], "next": [{"action": "dialogue", "char": "harry", "String": "\"This is another scene\""}, {"action": "jump", "label": "final"}]}}
+{
+	"labels": {
+		"start": [
+			{
+				"action": "scene",
+				"scene": "school"
+			},
+			{
+				"action": "show",
+				"char": "harry",
+				"emote": "neutral",
+				"pos": "left"
+			},
+			{
+				"action": "show",
+				"char": "kayla",
+				"emote": "neutral",
+				"pos": "right"
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"This is a test.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"emote": "happy",
+				"String": "\"So it is.\""
+			},
+			{
+				"action": "var",
+				"name": "k",
+				"value": 1
+			},
+			{
+				"protocol": "call",
+				"op1": [
+					"k",
+					"1",
+					"+"
+				],
+				"op2": [
+					"2"
+				],
+				"opr": "==",
+				"action": "if",
+				"target": "next"
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"emote": "sad",
+				"String": "\"It's pretty boring though.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"emote": "sad",
+				"String": "\"So it is.\""
+			},
+			{
+				"action": "adialogue",
+				"String": "\"This is a test of an anonymous message.\""
+			},
+			{
+				"action": "centered",
+				"char": "centered",
+				"String": "\"This is a test of a centered message.\""
+			},
+			{
+				"action": "call",
+				"label": "next"
+			}
+		],
+		"finalc1": [
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"That's good.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"I didn't.\""
+			}
+		],
+		"finalc2": [
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"I told you.\""
+			},
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"I see...\""
+			}
+		],
+		"final": [
+			{
+				"action": "dialogue",
+				"char": "kayla",
+				"String": "\"This is the final scene\""
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"Did you like this demo?\""
+			},
+			{
+				"action": "menu",
+				"options": [
+					{
+						"action": "option",
+						"protocol": "call",
+						"string": "\"Yes\"",
+						"target": "finalc1"
+					},
+					{
+						"action": "option",
+						"protocol": "jump",
+						"string": "\"No\"",
+						"target": "finalc2"
+					}
+				]
+			},
+			{
+				"action": "var",
+				"name": "num",
+				"value": 5
+			},
+			{
+				"action": "var",
+				"name": "bool",
+				"value": true
+			},
+			{
+				"action": "var",
+				"name": "float",
+				"value": 5.3221
+			},
+			{
+				"action": "var",
+				"name": "str",
+				"value": "meme"
+			},
+			{
+				"action": "meme"
+			},
+			{
+				"action": "keyword",
+				"args": [
+					"\"memes\""
+				]
+			},
+			{
+				"action": "window",
+				"value": "show"
+			},
+			{
+				"action": "play",
+				"anim": "screenShake"
+			},
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"Test to see if variables are being skipped properly.\""
+			}
+		],
+		"next": [
+			{
+				"action": "dialogue",
+				"char": "harry",
+				"String": "\"This is another scene\""
+			},
+			{
+				"action": "jump",
+				"label": "final"
+			}
+		]
+	}
+}

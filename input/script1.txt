@@ -1,3 +1,5 @@
+include "script2.txt"
+
 label start:
 	scene school
 	show harry neutral at left

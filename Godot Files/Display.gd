@@ -42,10 +42,10 @@ func serialize():
 func deserialize(save):
 	save = str2var(save)
 	read(save["script"])
-	Scene(save)
 	variables = save["vars"]
 	line = save["line"]
 	stack = save["stack"]
+	loadScene(save["scene"])
 	for c in save["chars"]:
 		var t = save["chars"][c]
 		get_node(c).visible = t["visible"]
@@ -110,11 +110,13 @@ func read(filename):
 	currentScript = filename
 
 func nextLine():
-	if len(stack[0]) == 0:
+	if stack[0]["index"] >= len(labels[stack[0]["label"]]):
 		stack.pop_front()
 	if len(stack) == 0:
 		return
-	line = stack[0].pop_front()
+	var cLabel = labels[stack[0]["label"]]
+	line = cLabel[stack[0]["index"]]
+	stack[0]["index"] += 1
 	statement()
 
 func statement():
@@ -122,31 +124,32 @@ func statement():
 		$Centered.text = ""
 	match line["action"]:
 		"show":
-			Show(line)
+			Show()
 		"hide":
-			Hide(line)
+			Hide()
 		"dialogue":
-			dialogue(line)
+			dialogue()
 		"adialogue":
-			adialogue(line)
+			adialogue()
 		"centered":
+			line["String"] = line["String"].format(variables)
 			centered(1)
 		"scene":
-			Scene(line)
+			Scene()
 		"call":
 			call(line["label"])
 		"jump":
 			jump(line["label"])
 		"var":
-			variable(line)
+			variable()
 		"menu":
 			menu()
 		"window":
-			window(line)
+			window()
 		"play":
-			play(line)
+			play()
 		"if":
-			condition(line)
+			condition()
 		_:
 			print(line)
 			nextLine()
@@ -160,26 +163,21 @@ func call(label):
 func jump(label):
 	if able:
 		working = true
-		stack = [labels[label].duplicate()]
+		stack = [ { "label": label, "index": 0 } ]
 		nextLine()
 	
 func push(label):
-	var label2 = labels[label].duplicate()
-	stack.push_front(label2)
+	stack.push_front( { "label": label, "index": 0 } )
 	
-func pushList(l):
-	var l2 = l.duplicate()
-	stack.push_front(l2)
-	
-func Show(s): # Show statement
-	var c = charNodes.get_node(s["char"])
-	c.global_position = $Positions.get_node(s["pos"]).global_position
-	c.play(s["emote"])
+func Show(): # Show statement
+	var c = charNodes.get_node(line["char"])
+	c.global_position = $Positions.get_node(line["pos"]).global_position
+	c.play(line["emote"])
 	c.visible = true
 	nextLine()
 	
-func Hide(s): # Hide statement
-	var c = charNodes.get_node(s["char"])
+func Hide(): # Hide statement
+	var c = charNodes.get_node(line["char"])
 	c.global_position = Vector2(0,0)
 	c.visible = false
 	nextLine()
@@ -193,18 +191,20 @@ func hideAll(): # Hides SukiGD
 	for sc in $Scenes.get_children():
 		sc.visible = false
 		
-func dialogue(s): # Displays a line of dialogue
-	if s.has("emote"):
-		var c = charNodes.get_node(s["char"])
-		c.play(s["emote"])
+func dialogue(): # Displays a line of dialogue
+	if line.has("emote"):
+		var c = charNodes.get_node(line["char"])
+		c.play(line["emote"])
 	$TextBox/Namebox.visible = true
 	nameBox.visible = true
-	nameBox.text = s["char"].capitalize()
+	nameBox.text = line["char"].capitalize()
+	line["String"] = line["String"].format(variables)
 	rollingDisplay(1)
 
-func adialogue(s):
+func adialogue():
 	$TextBox/Namebox.visible = false
 	nameBox.visible = false
+	line["String"] = line["String"].format(variables)
 	rollingDisplay(1)
 	
 func centered(index):
@@ -225,12 +225,17 @@ func rollingDisplay(index):
 		else:
 			emit_signal("lineFinished")
 	
-func Scene(s): # Changes the backdrop to the current scene
+func Scene(): # Changes the backdrop to the current scene
 	for sc in $Scenes.get_children():
 		sc.visible = false
-	get_node("Scenes/" + s["scene"]).visible = true
-	currentScene = s["scene"]
+	get_node("Scenes/" + line["scene"]).visible = true
+	currentScene = line["scene"]
 	nextLine()
+func loadScene(s): # Changes the backdrop to a given string
+	for sc in $Scenes.get_children():
+		sc.visible = false
+	get_node("Scenes/" + s).visible = true
+	currentScene = s
 		
 func end():
 	line = {}
@@ -242,8 +247,8 @@ func end():
 	yield(get_tree().create_timer(0.5), "timeout")
 	able = true
 	
-func variable(s):
-	variables[s["name"]] = s["value"]
+func variable():
+	variables[line["name"]] = line["value"]
 	nextLine()
 	
 func get(variable):
@@ -274,22 +279,22 @@ func menu_interact(o):
 		c.queue_free()
 	nextLine()
 	
-func window(s):
-	if s["value"] == "hide":
+func window():
+	if line["value"] == "hide":
 		$TextBox.visible = false
 	else:
 		$TextBox.visible = true
 	nextLine()
 		
-func play(s):
-	$AnimationPlayer.play(s["anim"])
+func play():
+	$AnimationPlayer.play(line["anim"])
 	nextLine()
 	
-func condition(s):
+func condition():
 	var result
-	var op1 = expression(s["op1"])
-	var op2 = expression(s["op2"])
-	match(s["opr"]):
+	var op1 = expression(line["op1"])
+	var op2 = expression(line["op2"])
+	match(line["opr"]):
 		"==": result = op1 == op2
 		"!=": result = op1 <= op2
 		">=": result = op1 >= op2
@@ -298,11 +303,10 @@ func condition(s):
 		"<": result = op1 < op2
 		_: print("ERROR! BAD OPERAND")
 	if result:
-		match(s["protocol"]):
-			"call": call(s["target"])
-			"jump": jump(s["target"])
+		match(line["protocol"]):
+			"call": call(line["target"])
+			"jump": jump(line["target"])
 			_: print("INVALID PROTOCOL")
-	nextLine()
 		
 func _on_root_lineFinished():
 	if auto:

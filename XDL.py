@@ -18,6 +18,7 @@ TOKEN_WINDOW = "window"
 TOKEN_PLAY = "play"
 TOKEN_CENTERED = "centered"
 TOKEN_IF = "if"
+TOKEN_INCLUDE = "include"
 
 STMT_SHOW = 5
 STMT_HIDE = 6
@@ -35,6 +36,7 @@ STMT_ACTION = 19
 STMT_WINDOW = 20
 STMT_PLAY = 21
 STMT_IF = 22
+STMT_INCLUDE = 23
 
 LEN_SHOW = [4, 5]
 LEN_HIDE = 2
@@ -50,6 +52,7 @@ LEN_OPTION = 4
 LEN_WINDOW = 2
 LEN_PLAY = 2
 LEN_IF = 6
+LEN_INCLUDE = 2
 
 OPERATORS = ['==','<=','>=','!=','>','<']
 
@@ -201,6 +204,13 @@ def checkSyntax(TYPE, STMT):
 		if isString(STMT[5]):
 			print(reStitch(STMT))
 			raise Exception("Syntax Error: Token 5: Unexpected String.")
+	elif TYPE == STMT_INCLUDE:
+		if len(STMT) != LEN_HIDE:
+			print(reStitch(STMT))
+			raise Exception(TOKENERROR)
+		elif not isString(STMT[1]):
+			print(reStitch(STMT))
+			raise Exception("String expected, got " + STMT[1])
 	else:
 		print(reStitch(STMT))
 		raise Exception("I don't know what you did, but don't do it again.")
@@ -224,6 +234,11 @@ def parse(filename): #Takes the list of tokens created by the scan function and 
 		if statement[0] == TOKEN_LABEL:
 			checkSyntax(STMT_LABEL, statement)
 			currentLabel = statement[1][:-1]
+		elif statement[0] == TOKEN_INCLUDE:
+			print("Performing an inclusion parse of "+statement[1])
+			k = parse(statement[1][1:-1])
+			for key in k["labels"].keys():
+				labels[key] = k["labels"][key]
 		elif statement[0] == TOKEN_OPTION:
 			if menu != { "action" : "menu" }:
 				temp = { }
