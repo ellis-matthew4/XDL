@@ -1,4 +1,5 @@
-# XDL- Extensible Dialogue Language (Formerly SukiGD)
+Support me on Itch!: https://duwangmuffin.itch.io/xdl
+# XDL- Extensible Dialogue Language
 A label-oriented dialogue system that uses a simple scripting language based on RenPy, but compiles to a JSON format built for Godot
 
 NOTE: The JSON format can theoretically be used by any engine, but for now the only one I am officially writing an interpreter for is Godot.
