@@ -36,7 +36,6 @@ Step 6: Add your characters as children of the "Characters" node as AnimatedSpri
 
 Step 7: Create an instance of Display.tscn. The methods to use it are as follows:
 ```
-loadConstants(filename) # use this to load constants. You can call this more than once, but keep in mind that calling it again will clear the current constants
 read(filename) # reads a script file into memory
 call(label) # calls a label from the currently loaded script file
 jump(label) # clears the current context, then calls the given label (essentially GOTO)
