@@ -32,7 +32,7 @@ Step 4: Check the output folder for your JSON files!
 
 Step 5: Add XDL's Godot Files folder and your scripts to your Godot library and edit the scene to make it look the way you want it to. I do not recommend editing any of XDL's scripts in order to add transitions or any other effects, these should be done in a wrapper function so that XDL functions normally. You also need to change some of the variables in Display.gd to match your file system.
 
-Step 6: Add your characters as children of the "Characters" node as AnimatedSprites. Make sure that the frame order matches the enumeration of your emotions in your constants file. (Make sure they are in the same order). Also add your backdrops as children of the Scenes Node2D. They should be Sprite nodes.
+Step 6: Add your characters as children of the "Characters" node as AnimatedSprites. Make sure that every emotion you reference in your script files has an animation of the same name, or you will see runtime crashes. Also add your backdrops as children of the Scenes Node2D. They should be Sprite nodes.
 
 Step 7: Create an instance of Display.tscn. The methods to use it are as follows:
 ```
