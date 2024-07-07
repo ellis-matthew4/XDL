@@ -1,14 +1,14 @@
 extends TextureButton
 
-var text setget setText
+var text : set = setText
 
 signal interact
 
 func _ready():
-	pass
-	
+  pass
+  
 func setText(text):
-	$Label.text = text
+  $Label.text = text
 
 func _on_Choice_pressed():
-	emit_signal("interact")
+  emit_signal("interact")

@@ -1,218 +1,275 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=26 format=3 uid="uid://88mdbpatn45d"]
 
-[ext_resource path="res://Display.gd" type="Script" id=1]
-[ext_resource path="res://assets/harry/harry_mad.png" type="Texture" id=2]
-[ext_resource path="res://assets/harry/harry_smug.png" type="Texture" id=3]
-[ext_resource path="res://assets/harry/harry_bloody3.png" type="Texture" id=4]
-[ext_resource path="res://assets/harry/harry_neutral.png" type="Texture" id=5]
-[ext_resource path="res://assets/harry/harry_sad.png" type="Texture" id=6]
-[ext_resource path="res://assets/harry/harry_shock.png" type="Texture" id=7]
-[ext_resource path="res://assets/harry/harry_happy.png" type="Texture" id=8]
-[ext_resource path="res://assets/harry/harry_laugh.png" type="Texture" id=9]
-[ext_resource path="res://assets/harry/harry_bloody1.png" type="Texture" id=10]
-[ext_resource path="res://assets/harry/harry_bloody2.png" type="Texture" id=11]
-[ext_resource path="res://assets/harry/harry_shy.png" type="Texture" id=12]
-[ext_resource path="res://assets/harry/harry_cry.png" type="Texture" id=13]
-[ext_resource path="res://assets/kayla/kayla_mad.png" type="Texture" id=14]
-[ext_resource path="res://assets/kayla/kayla_smug.png" type="Texture" id=15]
-[ext_resource path="res://assets/kayla/kayla_sad.png" type="Texture" id=16]
-[ext_resource path="res://assets/kayla/kayla_shock.png" type="Texture" id=17]
-[ext_resource path="res://assets/kayla/kayla_laugh.png" type="Texture" id=18]
-[ext_resource path="res://assets/kayla/kayla_think.png" type="Texture" id=19]
-[ext_resource path="res://assets/kayla/kayla_cry.png" type="Texture" id=20]
-[ext_resource path="res://assets/classroom.png" type="Texture" id=21]
-[ext_resource path="res://assets/textbox.png" type="Texture" id=22]
-[ext_resource path="res://assets/namebox.png" type="Texture" id=23]
+[ext_resource type="Script" path="res://Display.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cs5w1yo3rjv7k" path="res://assets/harry/harry_mad.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dpsnphbjwugpw" path="res://assets/harry/harry_smug.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dem0ghca7prmi" path="res://assets/harry/harry_bloody3.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bp44kxiqw82ah" path="res://assets/harry/harry_neutral.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://drwf8senuuymp" path="res://assets/harry/harry_sad.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://r4lyjnjrsllh" path="res://assets/harry/harry_shock.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://br0n4ade70shr" path="res://assets/harry/harry_happy.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://dof5org4iqvo0" path="res://assets/harry/harry_laugh.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://rj5khha4h8eo" path="res://assets/harry/harry_bloody1.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://b2gv8oeivyxtd" path="res://assets/harry/harry_bloody2.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://bjedupjvws88j" path="res://assets/harry/harry_shy.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://bkxxklbgp2wo" path="res://assets/harry/harry_cry.png" id="13"]
+[ext_resource type="Texture2D" uid="uid://dte34nqxexo54" path="res://assets/kayla/kayla_mad.png" id="14"]
+[ext_resource type="Texture2D" uid="uid://ccmgbb6q8djdx" path="res://assets/kayla/kayla_smug.png" id="15"]
+[ext_resource type="Texture2D" uid="uid://dmay36a7jlk7f" path="res://assets/kayla/kayla_sad.png" id="16"]
+[ext_resource type="Texture2D" uid="uid://cm76eto664khe" path="res://assets/kayla/kayla_shock.png" id="17"]
+[ext_resource type="Texture2D" uid="uid://ot8xqj8jeka" path="res://assets/kayla/kayla_laugh.png" id="18"]
+[ext_resource type="Texture2D" uid="uid://dgtowfxlmamky" path="res://assets/kayla/kayla_think.png" id="19"]
+[ext_resource type="Texture2D" uid="uid://djjk5af6gw2cs" path="res://assets/kayla/kayla_cry.png" id="20"]
+[ext_resource type="Texture2D" uid="uid://ccvvkdiml21uk" path="res://assets/classroom.png" id="21"]
+[ext_resource type="Texture2D" uid="uid://b0mh4q4ryfen3" path="res://assets/textbox.png" id="22"]
+[ext_resource type="Texture2D" uid="uid://dimd3gcqqx8p4" path="res://assets/namebox.png" id="23"]
 
-[sub_resource type="SpriteFrames" id=1]
-animations = [ {
-"frames": [ ExtResource( 2 ) ],
+[sub_resource type="SpriteFrames" id="1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10")
+}],
 "loop": true,
-"name": "mad",
+"name": &"bloody1",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11")
+}],
 "loop": true,
-"name": "smug",
+"name": &"bloody2",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
 "loop": true,
-"name": "bloody3",
+"name": &"bloody3",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 5 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
 "loop": true,
-"name": "neutral",
+"name": &"cry",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 6 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
 "loop": true,
-"name": "sad",
+"name": &"happy",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9")
+}],
 "loop": true,
-"name": "shock",
+"name": &"laugh",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 8 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
 "loop": true,
-"name": "happy",
+"name": &"mad",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 9 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
 "loop": true,
-"name": "laugh",
+"name": &"neutral",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 10 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
 "loop": true,
-"name": "bloody1",
+"name": &"sad",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 11 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7")
+}],
 "loop": true,
-"name": "bloody2",
+"name": &"shock",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 12 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12")
+}],
 "loop": true,
-"name": "shy",
+"name": &"shy",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 13 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
 "loop": true,
-"name": "cry",
+"name": &"smug",
 "speed": 5.0
-} ]
+}]
 
-[sub_resource type="SpriteFrames" id=2]
-animations = [ {
-"frames": [ ExtResource( 14 ) ],
+[sub_resource type="SpriteFrames" id="2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20")
+}],
 "loop": true,
-"name": "mad",
+"name": &"cry",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 15 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18")
+}],
 "loop": true,
-"name": "smug",
+"name": &"laugh",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 16 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
 "loop": true,
-"name": "sad",
+"name": &"mad",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16")
+}],
 "loop": true,
-"name": "shock",
+"name": &"sad",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 18 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17")
+}],
 "loop": true,
-"name": "laugh",
+"name": &"shock",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 19 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
 "loop": true,
-"name": "think",
+"name": &"smug",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 20 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19")
+}],
 "loop": true,
-"name": "cry",
+"name": &"think",
 "speed": 5.0
-} ]
+}]
 
 [node name="root" type="CanvasLayer"]
-pause_mode = 2
-script = ExtResource( 1 )
+process_mode = 2
+script = ExtResource("1")
 
 [node name="Characters" type="Node2D" parent="."]
 
-[node name="harry" type="AnimatedSprite" parent="Characters"]
+[node name="harry" type="AnimatedSprite2D" parent="Characters"]
 visible = false
-frames = SubResource( 1 )
-animation = "bloody1"
+sprite_frames = SubResource("1")
+animation = &"bloody1"
 
-[node name="kayla" type="AnimatedSprite" parent="Characters"]
+[node name="kayla" type="AnimatedSprite2D" parent="Characters"]
 visible = false
-frames = SubResource( 2 )
-animation = "cry"
+sprite_frames = SubResource("2")
+animation = &"cry"
 
 [node name="Scenes" type="Node2D" parent="."]
 z_index = -1
 
-[node name="school" type="Sprite" parent="Scenes"]
+[node name="school" type="Sprite2D" parent="Scenes"]
 visible = false
-texture = ExtResource( 21 )
+texture = ExtResource("21")
 centered = false
 
-[node name="TextBox" type="Sprite" parent="."]
-position = Vector2( 640, 598 )
-texture = ExtResource( 22 )
+[node name="TextBox" type="Sprite2D" parent="."]
+position = Vector2(640, 598)
+texture = ExtResource("22")
 
-[node name="Namebox" type="Sprite" parent="TextBox"]
-position = Vector2( -296.562, -84.3432 )
-texture = ExtResource( 23 )
+[node name="Namebox" type="Sprite2D" parent="TextBox"]
+position = Vector2(-296.562, -84.3432)
+texture = ExtResource("23")
 
 [node name="TextControl" type="Control" parent="TextBox"]
-margin_right = 40.0
-margin_bottom = 40.0
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Dialogue" type="Label" parent="TextBox/TextControl"]
-margin_left = -352.0
-margin_top = -44.0
-margin_right = 354.0
-margin_bottom = 59.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+layout_mode = 0
+offset_left = -352.0
+offset_top = -44.0
+offset_right = 354.0
+offset_bottom = 59.0
 text = "This is sample text"
-autowrap = true
 
 [node name="Name" type="Label" parent="TextBox/TextControl"]
-margin_left = -373.0
-margin_top = -99.0
-margin_right = -181.0
-margin_bottom = -64.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+layout_mode = 0
+offset_left = -373.0
+offset_top = -99.0
+offset_right = -181.0
+offset_bottom = -64.0
 text = "Name of character go here"
 
 [node name="Menu" type="VBoxContainer" parent="."]
 visible = false
+custom_minimum_size = Vector2(790, 35)
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -395.0
-margin_top = -204.0
-margin_right = 395.0
-margin_bottom = -169.0
-rect_min_size = Vector2( 790, 35 )
+offset_left = -395.0
+offset_top = -204.0
+offset_right = 395.0
+offset_bottom = -169.0
 alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Centered" type="Label" parent="."]
+custom_minimum_size = Vector2(720, 0)
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -360.0
-margin_top = -40.0
-margin_right = 360.0
-margin_bottom = 8.0
-rect_min_size = Vector2( 720, 0 )
-align = 1
-valign = 1
-autowrap = true
+offset_left = -360.0
+offset_top = -40.0
+offset_right = 360.0
+offset_bottom = 8.0
 
 [node name="Positions" type="Node2D" parent="."]
 
-[node name="left" type="Position2D" parent="Positions"]
-position = Vector2( 384, 432 )
+[node name="left" type="Marker2D" parent="Positions"]
+position = Vector2(384, 432)
 
-[node name="right" type="Position2D" parent="Positions"]
-position = Vector2( 896, 432 )
+[node name="right" type="Marker2D" parent="Positions"]
+position = Vector2(896, 432)
 
 [connection signal="lineFinished" from="." to="." method="_on_root_lineFinished"]

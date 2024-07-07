@@ -7,7 +7,7 @@ render_mode unshaded;
 
 uniform float cutoff : hint_range(0.0,1.0);
 
-uniform vec4 color : hint_color;
+uniform vec4 color : source_color;
 
 void fragment() {
 	COLOR = vec4(color.rgb, cutoff);
