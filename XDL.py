@@ -74,7 +74,7 @@ def reStitch(STMT):
 
 def checkSyntax(TYPE, STMT):
 	if TYPE == STMT_SHOW:
-		if not len(STMT) in LEN_SHOW:
+		if len(STMT) not in LEN_SHOW:
 			print(reStitch(STMT))
 			raise Exception(TOKENERROR)
 		elif isString(STMT[1]) or isString(STMT[2]):
@@ -100,8 +100,8 @@ def checkSyntax(TYPE, STMT):
 			print(reStitch(STMT))
 			raise Exception(STRINGERROR)
 	elif TYPE == STMT_DIALOG:
-		if not len(STMT) in LEN_DIALOG:
-			print(reStitch(STMT))
+		if len(STMT) not in LEN_DIALOG:
+			print(str(STMT))
 			raise Exception(TOKENERROR)
 		elif len(STMT) == 2:
 			if not isString(STMT[1]):
@@ -217,33 +217,32 @@ def checkSyntax(TYPE, STMT):
 		
 
 def isString(s): #Checks to see if the token is of type TOKEN_STRING
+	if s == '':
+		return False
 	return s[0] == s[-1] and s[0] == '"'
 
 def parse(filename): #Takes the list of tokens created by the scan function and turns them into a dictionary
 	statements = scan('input/' + filename)
 	out = { }
 	labels = { }
-	chars = { }
 	temp = { }
 	bg = { }
 	menu = { "action":"menu" }
-	currentCharName = ""
 	currentLabel = ""
 	dialogue = []
 	for statement in statements:
 		if statement[0] == TOKEN_LABEL:
 			checkSyntax(STMT_LABEL, statement)
-			currentLabel = statement[1][:-1]
+			currentLabel = statement[1][0:]
 		elif statement[0] == TOKEN_INCLUDE:
 			print("Performing an inclusion parse of "+statement[1])
-			k = parse(statement[1][1:-1])
+			k = parse(statement[1][1:])
 			for key in k["labels"].keys():
 				labels[key] = k["labels"][key]
 		elif statement[0] == TOKEN_OPTION:
 			if menu != { "action" : "menu" }:
 				temp = { }
 				checkSyntax(STMT_OPTION, statement)
-				currentOption = statement[1][:-1]
 				temp["action"] = statement[0]
 				temp["string"] = statement[1]
 				temp["protocol"] = statement[2]
@@ -370,23 +369,23 @@ def createCondition(s):
 	return new
 	
 def precedence(s): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-postfix-conversion-in-python/
-    if s is '(':
+    if s == '(':
         return 0
-    elif s is '+' or s is '-':
+    elif s == '+' or s == '-':
         return 1
-    elif s is '*' or s is '/' or s is '%':
+    elif s == '*' or s == '/' or s == '%':
         return 2
     else:
         return 99
                  
 def typeof(s): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-postfix-conversion-in-python/
-    if s is '(':
+    if s == '(':
         return leftparentheses
-    elif s is ')':
+    elif s == ')':
         return rightparentheses
-    elif s is '+' or s is '-' or s is '*' or s is '%' or s is '/':
+    elif s == '+' or s == '-' or s == '*' or s == '%' or s == '/':
         return operator
-    elif s is ' ':
+    elif s == ' ':
         return empty    
     else :
         return operand                          
@@ -395,57 +394,65 @@ def convert(infix): # From https://ragsagar.wordpress.com/2009/09/22/infix-to-po
 	postfix = []
 	temp = []
 	for i in infix :
-		type = typeof(i)
-		if type is leftparentheses :
+		char_type = typeof(i)
+		if char_type == leftparentheses :
 			temp.append(i)
-		elif type is rightparentheses :
-			next = temp.pop()
-			while next is not '(':
-				postfix.append(next)
-				next = temp.pop()
-		elif type is operand:
+		elif char_type == rightparentheses :
+			next_char = temp.pop()
+			while next_char != '(':
+				postfix.append(next_char)
+				next_char = temp.pop()
+		elif char_type == operand:
 			postfix.append(i)
-		elif type is operator:
+		elif char_type == operator:
 			p = precedence(i)
-			while len(temp) is not 0 and p <= precedence(temp[-1]) :
+			while len(temp) != 0 and p <= precedence(temp[-1]) :
 				postfix.append(temp.pop())
 			temp.append(i)
-		elif type is empty:
+		elif char_type == empty:
 			continue
 					 
 	while len(temp) > 0 :
 		postfix.append(temp.pop())
 	return postfix
 
+def scanLine(line):
+	if line.strip() == "" or line[0] == "#":
+		return []
+	l = []
+	word = ""
+	string = False
+	for c in line:
+		if c == "\t":
+			continue
+		if not string:
+			if c == " " or c == "\n" or c == "\r" or c == "":
+				if word == '':
+					continue
+				l.append(word)
+				word = ""
+			elif c == '"':
+				word += c
+				string = True
+			else:
+				word += c
+		else:
+			if c != '"':
+				word += c
+			else:
+				word += c
+				string = False
+	if word != "":
+		l.append(word)
+	return l
+
 def scan(filename): #Turns the input file into a list of lines, and each line into a list of tokens
 	f = open(filename, "r")
 	lines = []
-	string = False
 	for line in f.readlines():
-		if line.strip() == "" or line[0] == "#":
+		l = scanLine(line)
+		if l == []:
 			continue
-		l = []
-		word = ""
-		for c in line:
-			if c == "\t":
-				continue
-			if not string:
-				if c == " " or c == "\n" or c == "\r":
-					l.append(word)
-					word = ""
-				elif c == '"':
-					word += c
-					string = True
-				else:
-					word += c
-			else:
-				if c != '"':
-					word += c
-				else:
-					word += c
-					string = False
-		if word != "":
-			l.append(word)
 		lines.append(l)
 	return lines
 
